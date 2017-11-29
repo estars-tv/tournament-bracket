@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {Redirect} from 'react-router-dom';
 
 import * as actions from '../actions/actions';
 import removeEmptyElements from '../utils';
 import {teams as teamsConts} from '../constants/bracket';
+
+let redirect = false;
 
 class CreateTournament extends Component {
     render() {
@@ -65,6 +68,8 @@ class CreateTournament extends Component {
                 actions.changeTitle(tournamentName.value);
                 actions.createTournament(tournamentName.value, tournamentType.value, teams.value);
                 actions.displayError('');
+
+                redirect = true;
             } else {
                 actions.displayError(`Укажите правильное количество команд! 
                 Минимальное количество - ${teamsConts.MIN_TEAMS_COUNTER}, 
@@ -80,40 +85,41 @@ class CreateTournament extends Component {
             // }});
         }
 
-        return (
-            <form onSubmit={handleSubmit}>
-                <input
-                    className='tournament-name'
-                    name="name"
-                    type="text"
-                    placeholder="Название турнира"
-                    ref={(input) => {
-                        tournamentName = input
-                    }}
-                />
-                <select className='tournament-type' name="type" ref={(input) => {
-                    tournamentType = input
-                }}>
-                    <option value={0}>Single Elimination</option>
-                    <option value={1}>Double Elimination</option>
-                </select>
-                <label htmlFor="team-list" className='error' ref={(input) => {
-                    errorLabel = input
-                }}>
-                    {error}
-                </label>
-                <textarea
-                    id='team-list'
-                    className='teams-list'
-                    name="teams"
-                    placeholder="Введите участников турнира (каждый участник с новой строки)"
-                    ref={(input) => {
-                        teams = input
-                    }}
-                />
-                <button>Генерировать</button>
-            </form>
-        );
+        return redirect ?
+            <Redirect to='/bracket'/>
+            : (<form onSubmit={handleSubmit}>
+                    <input
+                        className='tournament-name'
+                        name="name"
+                        type="text"
+                        placeholder="Название турнира"
+                        ref={(input) => {
+                            tournamentName = input
+                        }}
+                    />
+                    <select className='tournament-type' name="type" ref={(input) => {
+                        tournamentType = input
+                    }}>
+                        <option value={0}>Single Elimination</option>
+                        <option value={1}>Double Elimination</option>
+                    </select>
+                    <label htmlFor="team-list" className='error' ref={(input) => {
+                        errorLabel = input
+                    }}>
+                        {error}
+                    </label>
+                    <textarea
+                        id='team-list'
+                        className='teams-list'
+                        name="teams"
+                        placeholder="Введите участников турнира (каждый участник с новой строки)"
+                        ref={(input) => {
+                            teams = input
+                        }}
+                    />
+                    <button>Генерировать</button>
+                </form>
+            );
     }
 }
 
