@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { bindActionCreators } from 'redux'
+import {bindActionCreators} from 'redux';
 
-import CreateTournament from '../components/tournament-form';
+import MainContent from '../containers/main-content';
 import Header from '../components/header';
 import * as actions from '../actions/actions'
 
@@ -48,9 +48,7 @@ class App extends Component {
         return (
             <div>
                 <Header title={title}/>
-                <section className={'container'}>
-                    <CreateTournament actions={actions}/>
-                </section>
+                <MainContent actions={actions}/>
             </div>
         )
     }

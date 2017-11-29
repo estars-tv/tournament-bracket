@@ -47,7 +47,7 @@ store.subscribe(() => {
 ReactDOM.render(
     <Provider store={store}>
         <Router>
-            <Route exact={true} path='/' component={App}/>
+            <Route path='/' component={App}/>
         </Router>
     </Provider>,
     document.getElementById('root')
