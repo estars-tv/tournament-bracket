@@ -1,0 +1,7 @@
+const actions = {
+    CHANGE_TITLE: 'CHANGE_TITLE',
+    CREATE_TOURNAMENT: 'CREATE_TOURNAMENT',
+    EDIT_TOURNAMENT: 'EDIT_TOURNAMENT'
+};
+
+export default actions;
