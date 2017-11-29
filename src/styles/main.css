@@ -43,3 +43,7 @@ textarea {
 button {
     margin-top: 30px;
 }
+
+.error {
+    color: red;
+}

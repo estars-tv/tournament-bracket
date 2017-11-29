@@ -9,4 +9,4 @@ const tours = {
   DEFAULT_TOUR_NAME: 'Tour {0}'
 };
 
-export default {teams, tours};
+export {teams, tours};

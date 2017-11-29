@@ -1,6 +1,13 @@
 import actions from '../constants/action-types';
 import removeEmptyElements from '../utils';
 
+function displayError(errorText) {
+    return {
+        type: actions.DISPLAY_ERROR,
+        errorLabel: errorText
+    };
+}
+
 function changeTitle(title) {
     return {
         type: actions.CHANGE_TITLE,
@@ -23,4 +30,4 @@ function createTournament(name, type, teams) {
     };
 }
 
-export {changeTitle, createTournament};
+export {changeTitle, createTournament, displayError};
