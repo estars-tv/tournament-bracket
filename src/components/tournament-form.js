@@ -5,7 +5,7 @@ import {Redirect} from 'react-router-dom';
 
 import * as actions from '../actions/actions';
 import removeEmptyElements from '../utils';
-import {teams as teamsConts} from '../constants/bracket';
+import {teams as teamsConts, bracket as bracketConsts} from '../constants/bracket';
 
 let redirect = false;
 
@@ -15,10 +15,6 @@ class CreateTournament extends Component {
             error = this.props.page.errorLabel;
 
         console.log('props', this.props);
-
-        // console.log('actions');
-        // console.log(actions);
-        // console.log(this.props);
 
         // function saveTournament(state = {}, action) {
         //     if (action.type === 'saveTournament') {
@@ -53,8 +49,60 @@ class CreateTournament extends Component {
         function checkTeams(teams) {
             const teamsArr = removeEmptyElements(teams.split('\n'));
 
+            bracketLimit(teams);
+
             return teamsConts.MIN_TEAMS_COUNTER <= teamsArr.length && teamsConts.MAX_TEAMS_COUNTER >= teamsArr.length;
         }
+
+        /**
+         * @name bracketLimit - получение размера турнирной сетки по количеству команд
+         * @param {String} teams - список команд
+         * @returns {number}
+         */
+        function bracketLimit(teams) {
+            const teamsArr = removeEmptyElements(teams.split('\n')),
+                count = teamsArr.length,
+                limit = bracketConsts.BRACKET_LIMITS.find((element) => element >= count);
+
+            // console.log('teamsArr', teamsArr);
+            // console.log('count', count);
+            console.log('limit', limit);
+
+            drawTeams(teams, limit);
+            return limit;
+        }
+
+        function drawTeams(teams, limit) {
+            const teamsArr = removeEmptyElements(teams.split('\n')),
+                count = teamsArr.length,
+                emptyTeams = limit - count;
+
+            console.log('emptyTeams', emptyTeams);
+
+            if (emptyTeams > 0) {
+                const firstEmptyPosition = limit / 2 - emptyTeams + 2;
+
+                console.log('firstEmptyPosition', firstEmptyPosition);
+
+                return addEmptyTeams(teamsArr, emptyTeams, firstEmptyPosition);
+            } else {
+                return teamsArr;
+            }
+        }
+
+        function addEmptyTeams(teamsArr, emptyTeams, firstEmptyPosition) {
+            for (let i = 0; i < emptyTeams; i++) {
+                teamsArr.splice(firstEmptyPosition, 0, teamsConts.EMPTY_TEAM_NAME);
+
+                firstEmptyPosition = firstEmptyPosition + 2;
+            }
+
+            console.log('addEmptyTeams', teamsArr);
+
+            return teamsArr;
+        }
+
+        //todo generate matches
 
         function handleSubmit(e) {
             e.preventDefault();
@@ -135,6 +183,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(CreateTournament)
-
-// export default CreateTournament;
+)(CreateTournament);

@@ -6,7 +6,12 @@ const teams = {
 };
 
 const tours = {
-  DEFAULT_TOUR_NAME: 'Tour {0}'
+    DEFAULT_TOUR_NAME: 'Tour {0}',
+
 };
 
-export {teams, tours};
+const bracket = {
+    BRACKET_LIMITS: [4, 8, 16, 32, 64, 128]
+};
+
+export {teams, tours, bracket};
