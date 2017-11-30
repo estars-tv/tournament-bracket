@@ -112,6 +112,25 @@ class CreateTournament extends Component {
 
             return teamsArr;
         }
+        
+        function generateMatches(teamsList) {
+            console.log('teamsList');
+
+            const matches = [],
+                teams = teamsList;
+
+            console.log(teams);
+            console.log(teams.length);
+
+            for (let i = 0; i < teamsList.length / 2; i++) {
+                console.log(matches);
+                console.log('_teams', teams);
+                matches.push({id: i, teamOwner: teams[0], teamGuest: teams[1]});
+                teams.splice(0, 2);
+            }
+
+            return matches;
+        }
 
         //todo generate matches
 
@@ -124,8 +143,13 @@ class CreateTournament extends Component {
 
             //todo проверку на заполненость полей
             if (checkTeams(teams.value)) {
+                const teamsList = drawTeams(),
+                    matches = generateMatches(teamsList);
+
+                console.log('matches', matches);
+
                 actions.changeTitle(tournamentName.value);
-                actions.createTournament(tournamentName.value, tournamentType.value, drawTeams());
+                actions.createTournament(tournamentName.value, tournamentType.value, teamsList);
                 actions.displayError('');
 
                 redirect = true;
