@@ -39,7 +39,10 @@ class CreateTournament extends Component {
         let tournamentName = '',
             tournamentType = null,
             teams = '',
-            errorLabel = '';
+            errorLabel = '',
+            teamsArr = [],
+            teamsCount = null,
+            bracketTeamsLimit = null;
 
         /**
          * @name checkTeams - проверка минимального / максимального количества команд
@@ -47,50 +50,58 @@ class CreateTournament extends Component {
          * @returns {boolean}
          */
         function checkTeams(teams) {
-            const teamsArr = removeEmptyElements(teams.split('\n'));
+            teamsArr = removeEmptyElements(teams.split('\n'));
 
-            bracketLimit(teams);
+            bracketLimit(teamsArr);
 
             return teamsConts.MIN_TEAMS_COUNTER <= teamsArr.length && teamsConts.MAX_TEAMS_COUNTER >= teamsArr.length;
         }
 
         /**
          * @name bracketLimit - получение размера турнирной сетки по количеству команд
-         * @param {String} teams - список команд
+         * @param {Array} teamsArr - список команд
          * @returns {number}
          */
-        function bracketLimit(teams) {
-            const teamsArr = removeEmptyElements(teams.split('\n')),
-                count = teamsArr.length,
-                limit = bracketConsts.BRACKET_LIMITS.find((element) => element >= count);
+        function bracketLimit(teamsArr) {
+            teamsCount = teamsArr.length;
+            bracketTeamsLimit = bracketConsts.BRACKET_LIMITS.find((element) => element >= teamsCount);
 
-            // console.log('teamsArr', teamsArr);
-            // console.log('count', count);
-            console.log('limit', limit);
+            console.log('teamsCount', teamsCount);
+            console.log('bracketTeamsLimit', bracketTeamsLimit);
 
-            drawTeams(teams, limit);
-            return limit;
+            return bracketTeamsLimit;
         }
 
-        function drawTeams(teams, limit) {
-            const teamsArr = removeEmptyElements(teams.split('\n')),
-                count = teamsArr.length,
-                emptyTeams = limit - count;
+        /**
+         * @name drawTeams - распределение команд
+         * @return {Array}
+         */
+        function drawTeams() {
+            const emptyTeams = bracketTeamsLimit - teamsCount;
 
+            console.log('drawTeams func');
+            console.log('bracketTeamsLimit', teamsCount);
+            console.log('teamsCount', teamsCount);
             console.log('emptyTeams', emptyTeams);
 
             if (emptyTeams > 0) {
-                const firstEmptyPosition = limit / 2 - emptyTeams + 2;
+                const firstEmptyPosition = bracketTeamsLimit / 2 - emptyTeams + 2;
 
                 console.log('firstEmptyPosition', firstEmptyPosition);
 
-                return addEmptyTeams(teamsArr, emptyTeams, firstEmptyPosition);
+                return addEmptyTeams(emptyTeams, firstEmptyPosition);
             } else {
                 return teamsArr;
             }
         }
 
-        function addEmptyTeams(teamsArr, emptyTeams, firstEmptyPosition) {
+        /**
+         * @name addEmptyTeams - добавление команд-пустышек
+         * @param emptyTeams
+         * @param firstEmptyPosition
+         * @return {Array}
+         */
+        function addEmptyTeams(emptyTeams, firstEmptyPosition) {
             for (let i = 0; i < emptyTeams; i++) {
                 teamsArr.splice(firstEmptyPosition, 0, teamsConts.EMPTY_TEAM_NAME);
 
@@ -114,7 +125,7 @@ class CreateTournament extends Component {
             //todo проверку на заполненость полей
             if (checkTeams(teams.value)) {
                 actions.changeTitle(tournamentName.value);
-                actions.createTournament(tournamentName.value, tournamentType.value, teams.value);
+                actions.createTournament(tournamentName.value, tournamentType.value, drawTeams());
                 actions.displayError('');
 
                 redirect = true;

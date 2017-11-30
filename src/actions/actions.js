@@ -16,16 +16,15 @@ function changeTitle(title) {
 }
 
 function createTournament(name, type, teams) {
-    const teamsArr = removeEmptyElements(teams.split('\n')),
-        counter = teamsArr.length,
-        tournamentType = parseInt(type);
+    const tournamentType = parseInt(type),
+        teamsCounter = teams.length;
 
     return {
         type: actions.CREATE_TOURNAMENT,
         tournamentName: name,
         tournamentType: tournamentType,
-        teams: teamsArr,
-        counter: counter,
+        teams: teams,
+        counter: teamsCounter,
         tours: []
     };
 }
