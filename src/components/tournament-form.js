@@ -112,7 +112,12 @@ class CreateTournament extends Component {
 
             return teamsArr;
         }
-        
+
+        /**
+         * @name generateMatches - генерируем начальные матчи
+         * @param teamsList
+         * @return {Array}
+         */
         function generateMatches(teamsList) {
             console.log('teamsList');
 
@@ -132,6 +137,19 @@ class CreateTournament extends Component {
             return matches;
         }
 
+        function generateTours(matches) {
+            //TODO se de зависимость
+            const tours = [];
+
+            for (let i = 0; i < matches.length / 2; i++) {
+                tours[i] = [];
+
+                tours[i]
+            }
+
+            console.log('tours', tours);
+        }
+
         //todo generate matches
 
         function handleSubmit(e) {
@@ -145,6 +163,8 @@ class CreateTournament extends Component {
             if (checkTeams(teams.value)) {
                 const teamsList = drawTeams(),
                     matches = generateMatches(teamsList);
+
+                generateTours(matches);
 
                 console.log('matches', matches);
 
