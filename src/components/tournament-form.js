@@ -117,7 +117,7 @@ class CreateTournament extends Component {
             console.log('teamsList');
 
             const matches = [],
-                teams = teamsList;
+                teams = teamsList.slice();
 
             console.log(teams);
             console.log(teams.length);
