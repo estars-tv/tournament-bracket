@@ -1,5 +1,4 @@
 import actions from '../constants/action-types';
-import {removeEmptyElements} from '../utils';
 
 function displayError(errorText) {
     return {
@@ -15,7 +14,7 @@ function changeTitle(title) {
     };
 }
 
-function createTournament(name, type, teams) {
+function createTournament(name, type, teams, tours) {
     const tournamentType = parseInt(type),
         teamsCounter = teams.length;
 
@@ -25,7 +24,7 @@ function createTournament(name, type, teams) {
         tournamentType: tournamentType,
         teams: teams,
         counter: teamsCounter,
-        tours: []
+        tours: tours
     };
 }
 

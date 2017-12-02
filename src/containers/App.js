@@ -43,12 +43,13 @@ import '../styles/main.css';
 class App extends Component {
     render() {
         const title = this.props.page.title,
-            actions = this.props.actions;
+            actions = this.props.actions,
+            tournament = this.props.tournament;
 
         return (
             <div>
                 <Header title={title}/>
-                <MainContent actions={actions}/>
+                <MainContent actions={actions} tournament={tournament}/>
             </div>
         )
     }

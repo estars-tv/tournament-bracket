@@ -232,7 +232,7 @@ class CreateTournament extends Component {
                 // console.log('tours', tours);
 
                 actions.changeTitle(tournamentName.value);
-                actions.createTournament(tournamentName.value, tournamentType.value, teamsList);
+                actions.createTournament(tournamentName.value, tournamentType.value, teamsList, tours);
                 actions.displayError('');
 
                 redirect = true;
@@ -241,14 +241,6 @@ class CreateTournament extends Component {
                 Минимальное количество - ${teamsConsts.MIN_TEAMS_COUNTER}, 
                 максимальное - ${teamsConsts.MAX_TEAMS_COUNTER}`);
             }
-
-            // dispatch(actions.changeTitle(tournamentName.value));
-            // changeTitle(tournamentName.value);
-            // store.dispatch({type: 'saveTournament', tournament: {
-            //     name: tournamentName,
-            //     type: tournamentType,
-            //     teams: teamsList
-            // }});
         }
 
         return redirect ?

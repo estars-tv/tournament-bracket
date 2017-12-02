@@ -8,7 +8,8 @@ import Bracket from '../containers/bracket';
 
 class MainContent extends Component {
     render() {
-        const actions = this.props.actions;
+        const actions = this.props.actions,
+            tournament = this.props.tournament;
 
         // Это всего лишь обертка для компонента Home, позволяющая передавать
         // дополнительные параметры через замыкание.
@@ -18,16 +19,16 @@ class MainContent extends Component {
             return (<CreateTournament {...props} actions={actions} />);
         };
 
-        // const WrappedBracket = function(props) {
-        //     // Конструкция "{...props}" нужна, чтобы не потерять
-        //     // параметры, переданные от компонента Route
-        //     return (<Bracket {...props} />);
-        // };
+        const WrappedBracket = function(props) {
+            // Конструкция "{...props}" нужна, чтобы не потерять
+            // параметры, переданные от компонента Route
+            return (<Bracket {...props} tournament={tournament} />);
+        };
 
         return (
             <section className={'container'}>
                 <Route exact={true} path='/' component={WrappedCreateTournament}/>
-                <Route exact={true} path='/bracket' component={Bracket}/>
+                <Route exact={true} path='/bracket' component={WrappedBracket}/>
             </section>
         );
     }
