@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
 import {Route} from 'react-router-dom';
+// import Bracket from '../components/Bracket';
+// import BracketGame from '../components/BracketGame';
+// import BracketGenerator from '../components/BracketGenerator';
+// import GameShape from '../components/GameShape';
 
 import CreateTournament from '../components/tournament-form';
 // import Bracket from "./bracket";
