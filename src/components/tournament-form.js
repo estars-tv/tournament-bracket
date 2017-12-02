@@ -124,8 +124,8 @@ class CreateTournament extends Component {
             const matches = [],
                 teams = teamsList.slice();
 
-            console.log(teams);
-            console.log(teams.length);
+            // console.log(teams);
+            // console.log(teams.length);
 
             for (let i = 0; i < teamsList.length / 2; i++) {
                 // console.log(matches);
@@ -137,56 +137,83 @@ class CreateTournament extends Component {
             return matches;
         }
 
+        /**
+         * @name generateTours - разделение на туры
+         * @param matches - список начальных матчей
+         * @return {Array}
+         */
         function generateTours(matches) {
             //TODO se de зависимость
-            const tours = [],
-                notEmpty = {
-                    teamGuest: 'teamOwner',
-                    teamOwner: 'teamGuest'
-                },
+            const tours = [matches],
                 countMatches = matches.length;
 
-            tours[0] = matches;
+            let matchIdIncrement = countMatches;
 
             for (let i = 1; i < countMatches / 2; i++) {
                 const prevTour = tours[i - 1],
                     prevTourMatches = prevTour.length;
 
+                console.log('prevTour', prevTour);
+                console.log('prevTourMatches', prevTourMatches);
+
                 tours[i] = [];
 
+                let t = 0;
+
                 for (let n = 0; n < prevTourMatches / 2; n++) {
-                    const nextMatch = {};
+                    const nextMatch = {},
+                        firstMatch = prevTour[t],
+                        secondMath = prevTour[t + 1];
+                    //
+                    // console.log('countMatches', countMatches);
+                    // console.log('matches.length', matches.length);
 
-                    nextMatch.id = matches.length;
+                    nextMatch.id = matchIdIncrement;
+                    nextMatch.teamOwner = getMatchWinner(firstMatch);
+                    nextMatch.teamGuest = getMatchWinner(secondMath);
 
-                    const hasEmpty = Object.keys(prevTour[n]).find(function (key) {
-                        const isEmpty = prevTour[n][key] === teamsConsts.EMPTY_TEAM_NAME;
-
-                        console.log(isEmpty);
-                        console.log(key);
-                        console.log(n);
-                        console.log('_________________________________');
-
-                        if (isEmpty) return key;
-                    });
-
-                    console.log('hasEmpty', hasEmpty);
-
-                    if (hasEmpty) {
-                        nextMatch.teamOwner = prevTour[n][notEmpty[hasEmpty]];
-                    } else {
-                        nextMatch.teamOwner = teamsConsts.MATCH_WINNER.toValue(n);
-                    }
-
-                    matches.push(nextMatch);
                     tours[i].push(nextMatch);
+                    // matches.push(nextMatch);
+
+                    // console.log('i', i);
+
+                    t = t + 2;
+                    matchIdIncrement++;
                 }
             }
 
             console.log('tours', tours);
+            // console.log('matches', matches);
+
+            return tours;
         }
 
-        //todo generate matches
+        /**
+         * @name hasEmpty - проверка на пустую команду в матче
+         * @param match - матч
+         * @return {*} - [ключ] teamGuest/teamOwner пустой команды
+         */
+        function hasEmpty(match) {
+            return Object.keys(match).find(function (key) {
+                const isEmpty = match[key] === teamsConsts.EMPTY_TEAM_NAME;
+
+                if (isEmpty) return key;
+            });
+        }
+
+        /**
+         * @name getMatchWinner - получение победителя в матче
+         * @param match - матч
+         * @return {String}
+         */
+        function getMatchWinner(match) {
+            const notEmpty = {
+                teamGuest: 'teamOwner',
+                teamOwner: 'teamGuest'
+            };
+
+            return match[notEmpty[hasEmpty(match)]] || teamsConsts.MATCH_WINNER.toValue(match.id);
+        }
 
         function handleSubmit(e) {
             e.preventDefault();
@@ -198,11 +225,11 @@ class CreateTournament extends Component {
             //todo проверку на заполненость полей
             if (checkTeams(teams.value)) {
                 const teamsList = drawTeams(),
-                    matches = generateMatches(teamsList);
+                    matches = generateMatches(teamsList),
+                    tours = generateTours(matches);
 
-                generateTours(matches);
-
-                console.log('matches', matches);
+                // console.log('matches', matches);
+                // console.log('tours', tours);
 
                 actions.changeTitle(tournamentName.value);
                 actions.createTournament(tournamentName.value, tournamentType.value, teamsList);
