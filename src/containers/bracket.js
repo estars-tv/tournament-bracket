@@ -5,7 +5,7 @@ class Bracket extends Component {
     render() {
         const tournament = this.props.tournament;
 
-        return tournament.name === "" || tournament.tours.length === 0 ?
+        return tournament.tours.length === 0 ?
             <Redirect to='/'/> :
             <h1>bracket is there!</h1>;
     }
