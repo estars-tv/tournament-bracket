@@ -1,5 +1,5 @@
 import actions from '../constants/action-types';
-import removeEmptyElements from '../utils';
+import {removeEmptyElements} from '../utils';
 
 function displayError(errorText) {
     return {

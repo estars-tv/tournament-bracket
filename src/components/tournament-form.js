@@ -4,8 +4,8 @@ import {bindActionCreators} from 'redux';
 import {Redirect} from 'react-router-dom';
 
 import * as actions from '../actions/actions';
-import removeEmptyElements from '../utils';
-import {teams as teamsConts, bracket as bracketConsts} from '../constants/bracket';
+import {removeEmptyElements} from '../utils';
+import {teams as teamsConsts, bracket as bracketConsts} from '../constants/bracket';
 
 let redirect = false;
 
@@ -54,7 +54,7 @@ class CreateTournament extends Component {
 
             bracketLimit(teamsArr);
 
-            return teamsConts.MIN_TEAMS_COUNTER <= teamsArr.length && teamsConts.MAX_TEAMS_COUNTER >= teamsArr.length;
+            return teamsConsts.MIN_TEAMS_COUNTER <= teamsArr.length && teamsConsts.MAX_TEAMS_COUNTER >= teamsArr.length;
         }
 
         /**
@@ -103,7 +103,7 @@ class CreateTournament extends Component {
          */
         function addEmptyTeams(emptyTeams, firstEmptyPosition) {
             for (let i = 0; i < emptyTeams; i++) {
-                teamsArr.splice(firstEmptyPosition, 0, teamsConts.EMPTY_TEAM_NAME);
+                teamsArr.splice(firstEmptyPosition, 0, teamsConsts.EMPTY_TEAM_NAME);
 
                 firstEmptyPosition = firstEmptyPosition + 2;
             }
@@ -128,8 +128,8 @@ class CreateTournament extends Component {
             console.log(teams.length);
 
             for (let i = 0; i < teamsList.length / 2; i++) {
-                console.log(matches);
-                console.log('_teams', teams);
+                // console.log(matches);
+                // console.log('_teams', teams);
                 matches.push({id: i, teamOwner: teams[0], teamGuest: teams[1]});
                 teams.splice(0, 2);
             }
@@ -139,12 +139,48 @@ class CreateTournament extends Component {
 
         function generateTours(matches) {
             //TODO se de зависимость
-            const tours = [];
+            const tours = [],
+                notEmpty = {
+                    teamGuest: 'teamOwner',
+                    teamOwner: 'teamGuest'
+                },
+                countMatches = matches.length;
 
-            for (let i = 0; i < matches.length / 2; i++) {
+            tours[0] = matches;
+
+            for (let i = 1; i < countMatches / 2; i++) {
+                const prevTour = tours[i - 1],
+                    prevTourMatches = prevTour.length;
+
                 tours[i] = [];
 
-                tours[i]
+                for (let n = 0; n < prevTourMatches / 2; n++) {
+                    const nextMatch = {};
+
+                    nextMatch.id = matches.length;
+
+                    const hasEmpty = Object.keys(prevTour[n]).find(function (key) {
+                        const isEmpty = prevTour[n][key] === teamsConsts.EMPTY_TEAM_NAME;
+
+                        console.log(isEmpty);
+                        console.log(key);
+                        console.log(n);
+                        console.log('_________________________________');
+
+                        if (isEmpty) return key;
+                    });
+
+                    console.log('hasEmpty', hasEmpty);
+
+                    if (hasEmpty) {
+                        nextMatch.teamOwner = prevTour[n][notEmpty[hasEmpty]];
+                    } else {
+                        nextMatch.teamOwner = teamsConsts.MATCH_WINNER.toValue(n);
+                    }
+
+                    matches.push(nextMatch);
+                    tours[i].push(nextMatch);
+                }
             }
 
             console.log('tours', tours);
@@ -175,8 +211,8 @@ class CreateTournament extends Component {
                 redirect = true;
             } else {
                 actions.displayError(`Укажите правильное количество команд! 
-                Минимальное количество - ${teamsConts.MIN_TEAMS_COUNTER}, 
-                максимальное - ${teamsConts.MAX_TEAMS_COUNTER}`);
+                Минимальное количество - ${teamsConsts.MIN_TEAMS_COUNTER}, 
+                максимальное - ${teamsConsts.MAX_TEAMS_COUNTER}`);
             }
 
             // dispatch(actions.changeTitle(tournamentName.value));

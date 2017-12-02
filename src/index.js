@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import configureStore from './store/configure-store';
+import {extendString} from './utils';
 
 // import {createStore} from 'redux';
 
@@ -36,6 +37,8 @@ import registerServiceWorker from './registerServiceWorker';
 // const store = createStore(initStoreModel);
 
 const store = configureStore();
+
+extendString();
 
 //todo drop
 store.subscribe(() => {
