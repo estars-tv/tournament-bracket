@@ -5,8 +5,8 @@ const lazyFunction = f => ((...args) => f().apply(this, args));
 
 let GameShape;
 
-export const HOME = 'home';
-export const VISITOR = 'visitor';
+export const teamOwner = 'teamOwner';
+export const teamGuest = 'teamGuest';
 
 // const ID_TYPE = PropTypes.string;
 

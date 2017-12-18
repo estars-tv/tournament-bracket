@@ -25,7 +25,7 @@ const toBracketGames = ({GameComponent, game, x, y, gameDimensions, roundSeparat
                 // ({seed: {sourceGame}, side}) => {
                 ({sourceGame, side}) => {
                     // we put visitor teams on the bottom
-                    const isTop = side === 'home' ? homeOnTop : !homeOnTop,
+                    const isTop = side === 'teamOwner' ? homeOnTop : !homeOnTop,
                         multiplier = isTop ? -1 : 1;
 
                     const pathInfo = [

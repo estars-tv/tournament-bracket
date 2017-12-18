@@ -4,7 +4,7 @@ import _ from "underscore";
 // import moment from "moment";
 
 import {RectClipped} from "./clipped";
-import GameShape, {HOME, VISITOR} from "./game-shape";
+import GameShape, {teamOwner, teamGuest} from "./game-shape";
 
 class BracketGame extends PureComponent {
     // static propTypes = {
@@ -82,8 +82,8 @@ class BracketGame extends PureComponent {
 
         const {sides} = game;
 
-        const top = sides[homeOnTop ? HOME : VISITOR],
-            bottom = sides[homeOnTop ? VISITOR : HOME];
+        const top = sides[homeOnTop ? teamOwner : teamGuest],
+            bottom = sides[homeOnTop ? teamGuest : teamOwner];
 
         const winnerBackground = (top && bottom && top.score && bottom.score && top.score !== bottom.score) ?
             (
@@ -95,10 +95,10 @@ class BracketGame extends PureComponent {
 
         const Side = ({x, y, side, onHover}) => {
             // const tooltip = side.seed && side.team ? <title>{side.seed.displayName}</title> : null;
-            const tooltip = side.team ? <title>{side.team}</title> : null;
+            const tooltip = side.name ? <title>{side.name}</title> : null;
 
             return (
-                <g onMouseEnter={() => onHover(side && side.team ? side.team.id : null)}
+                <g onMouseEnter={() => onHover(side && side.name ? side.name.id : null)}
                    onMouseLeave={() => onHover(null)}>
                     {/* trigger mouse events on the entire block */}
                     <rect x={x} y={y} height={22.5} width={200} fillOpacity={0}>
@@ -111,7 +111,7 @@ class BracketGame extends PureComponent {
                               style={{...teamNameStyle, fontStyle: null}}>
                             {tooltip}
                             {/*{side.team ? side.team.name : (side.seed ? side.seed.displayName : null)}*/}
-                            {side.team || null}
+                            {side.name || null}
                         </text>
                     </RectClipped>
 
@@ -122,8 +122,8 @@ class BracketGame extends PureComponent {
             );
         };
 
-        const topHovered = (top && top.team && top.team.id === hoveredTeamId),
-            bottomHovered = (bottom && bottom.team && bottom.team.id === hoveredTeamId);
+        const topHovered = (top && top.name && top.name.id === hoveredTeamId),
+            bottomHovered = (bottom && bottom.name && bottom.name.id === hoveredTeamId);
 
         return (
             <svg width="200" height="82" viewBox="0 0 200 82" {...rest}>

@@ -147,10 +147,8 @@ class CreateTournament extends Component {
             const tours = [matches],
                 countMatches = matches.length,
                 matchesCounter = teamsConsts.MIN_TEAMS_COUNTER / 2 === countMatches ? countMatches / 2 + 1 : countMatches / 2;
-            console.debug('teamsConsts.MIN_TEAMS_COUNTER', teamsConsts.MIN_TEAMS_COUNTER);
 
-            alert(3224);
-            debugger;
+            console.debug('teamsConsts.MIN_TEAMS_COUNTER', teamsConsts.MIN_TEAMS_COUNTER);
             console.debug('matches', matches);
             console.debug('tours', tours);
             console.debug('countMatches', countMatches);
