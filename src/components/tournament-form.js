@@ -36,6 +36,8 @@ class CreateTournament extends Component {
         //     console.log('subscribe', store.getState());
         // });
 
+        //TODO вынести все из рендера
+
         let tournamentName = '',
             tournamentType = null,
             teams = '',
@@ -168,9 +170,12 @@ class CreateTournament extends Component {
             console.debug('countMatches', countMatches);
             console.debug('matchesCounter', matchesCounter);
 
-            let matchIdIncrement = countMatches;
+            let matchIdIncrement = countMatches,
+                toursDecrement = countMatches,
+                i = 1;
 
-            for (let i = 1; i < matchesCounter; i++) {
+            // for (let i = 1; i < matchesCounter; i++) {
+            while (toursDecrement / 2 >= 1) {
                 const prevTour = tours[i - 1],
                     prevTourMatches = prevTour.length;
 
@@ -187,6 +192,9 @@ class CreateTournament extends Component {
                         secondMath = prevTour[t + 1],
                         firstMatchWinner = getMatchWinner(firstMatch),
                         secondMatchWinner = getMatchWinner(secondMath);
+
+                    console.log('firstMatchWinner', firstMatchWinner);
+                    console.log('secondMatchWinner', secondMatchWinner);
 
                     //
                     // console.log('countMatches', countMatches);
@@ -216,6 +224,10 @@ class CreateTournament extends Component {
                         nextMatch.sides.teamGuest.score = 0;
                     }
 
+                    console.log('tours', tours);
+                    console.log('i', i);
+                    console.log('nextMatch', nextMatch);
+
                     tours[i].push(nextMatch);
                     // matches.push(nextMatch);
 
@@ -224,6 +236,9 @@ class CreateTournament extends Component {
                     t = t + 2;
                     matchIdIncrement++;
                 }
+
+                toursDecrement /= 2;
+                i++;
             }
 
             console.log('tours', tours);
@@ -231,6 +246,21 @@ class CreateTournament extends Component {
 
             return tours;
         }
+
+        // console.log('toursLimit', toursLimit());
+        console.log('bracketLimit(teamsArr)', bracketLimit(teamsArr));
+        console.log('teamsCount', teamsCount);
+        console.log('bracketTeamsLimit', bracketTeamsLimit);
+
+        // function toursLimit() {
+        //     let limit = 0;
+        //
+        //     while (bracketLimit(teamsArr) / 2 >= 2) {
+        //         limit++;
+        //     }
+        //
+        //     return limit;
+        // }
 
         /**
          * @name hasEmpty - проверка на пустую команду в матче
