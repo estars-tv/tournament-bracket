@@ -130,7 +130,21 @@ class CreateTournament extends Component {
             for (let i = 0; i < teamsList.length / 2; i++) {
                 // console.log(matches);
                 // console.log('_teams', teams);
-                matches.push({id: i, teamOwner: teams[0], teamGuest: teams[1]});
+                matches.push({
+                    id: i,
+                    sides: {
+                        teamOwner: {
+                            name: teams[0],
+                            score: null,
+                            sourceGame: null
+                        },
+                        teamGuest: {
+                            name: teams[1],
+                            score: null,
+                            sourceGame: null
+                        }
+                    }
+                });
                 teams.splice(0, 2);
             }
 
@@ -170,15 +184,54 @@ class CreateTournament extends Component {
                 for (let n = 0; n < prevTourMatches / 2; n++) {
                     const nextMatch = {},
                         firstMatch = prevTour[t],
-                        secondMath = prevTour[t + 1];
+                        secondMath = prevTour[t + 1],
+                        firstMatchWinner = getMatchWinner(firstMatch),
+                        secondMatchWinner = getMatchWinner(secondMath);
                     //
                     // console.log('countMatches', countMatches);
                     // console.log('matches.length', matches.length);
 
                     nextMatch.id = matchIdIncrement;
-                    nextMatch.teamOwner = getMatchWinner(firstMatch);
-                    nextMatch.teamGuest = getMatchWinner(secondMath);
 
+                    if (firstMatchWinner === teamsConsts.EMPTY_TEAM_NAME) {
+                        nextMatch.sides = {
+                            teamOwner: {
+                                name: teams[0],
+                                score: 0
+                            },
+                            teamGuest: {
+                                name: teams[1],
+                                score: 1
+                            }
+                        };
+                    } else if (secondMatchWinner === teamsConsts.EMPTY_TEAM_NAME) {
+                        nextMatch.sides = {
+                            teamOwner: {
+                                name: teams[0],
+                                score: 1
+                            },
+                            teamGuest: {
+                                name: teams[1],
+                                score: 0
+                            }
+                        };
+                    } else {
+                        nextMatch.sides = {
+                            teamOwner: {
+                                name: firstMatchWinner,
+                                score: null
+                            },
+                            teamGuest: {
+                                name: secondMatchWinner,
+                                score: null
+                            }
+                        };
+                    }
+
+                    //
+                    // nextMatch.sides.teamOwner = getMatchWinner(firstMatch);
+                    // nextMatch.sides.teamGuest = getMatchWinner(secondMath);
+debugger;
                     tours[i].push(nextMatch);
                     // matches.push(nextMatch);
 

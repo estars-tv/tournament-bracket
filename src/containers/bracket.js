@@ -14,14 +14,12 @@ const DEMO_DATA = [
             "teamGuest": {
                 "name": 'team1',
                 "score": 21,
-                "sourceGame": null,
-                "seed": {}
+                "sourceGame": null
             },
             "teamOwner": {
                 "name": 'team2',
                 "score": 42,
-                "sourceGame": null,
-                "seed": {}
+                "sourceGame": null
             }
         }
     },
@@ -32,14 +30,12 @@ const DEMO_DATA = [
             "teamGuest": {
                 "name": 'team3',
                 "score": 21,
-                "sourceGame": null,
-                "seed": {}
+                "sourceGame": null
             },
             "teamOwner": {
                 "name": 'team3',
                 "score": 42,
-                "sourceGame": null,
-                "seed": {}
+                "sourceGame": null
             }
         }
     },
@@ -50,14 +46,12 @@ const DEMO_DATA = [
             "teamGuest": {
                 "name": 'team3',
                 "score": 21,
-                "sourceGame": null,
-                "seed": {}
+                "sourceGame": null
             },
             "teamOwner": {
                 "name": 'team3',
                 "score": 42,
-                "sourceGame": null,
-                "seed": {}
+                "sourceGame": null
             }
         }
     },
@@ -68,14 +62,12 @@ const DEMO_DATA = [
             "teamGuest": {
                 "name": 'team3',
                 "score": 21,
-                "sourceGame": null,
-                "seed": {}
+                "sourceGame": null
             },
             "teamOwner": {
                 "name": 'team3',
                 "score": 42,
-                "sourceGame": null,
-                "seed": {}
+                "sourceGame": null
             }
         }
     },
@@ -86,14 +78,12 @@ const DEMO_DATA = [
             "teamGuest": {
                 "name": 'team3',
                 "score": 42,
-                "sourceGame": {"@ref": "0"},
-                "seed": {}
+                "sourceGame": {"@ref": "0"}
             },
             "teamOwner": {
                 "name": 'team3',
                 "score": 42,
-                "sourceGame": {"@ref": "1"},
-                "seed": {}
+                "sourceGame": {"@ref": "1"}
             }
         }
     },
@@ -104,14 +94,12 @@ const DEMO_DATA = [
             "teamGuest": {
                 "name": 'team3',
                 "score": 42,
-                "sourceGame": {"@ref": "2"},
-                "seed": {}
+                "sourceGame": {"@ref": "2"}
             },
             "teamOwner": {
                 "name": 'team3',
                 "score": 42,
-                "sourceGame": {"@ref": "3"},
-                "seed": {}
+                "sourceGame": {"@ref": "3"}
             }
         }
     },
@@ -122,14 +110,12 @@ const DEMO_DATA = [
             "teamGuest": {
                 "name": 'team3',
                 "score": 42,
-                "sourceGame": {"@ref": "4"},
-                "seed": {}
+                "sourceGame": {"@ref": "4"}
             },
             "teamOwner": {
                 "name": 'team3',
                 "score": 42,
-                "sourceGame": {"@ref": "5"},
-                "seed": {}
+                "sourceGame": {"@ref": "5"}
             }
         }
     }
