@@ -8,7 +8,7 @@ import {Route} from 'react-router-dom';
 import CreateTournament from '../components/tournament-form';
 // import Bracket from "./bracket";
 
-import Bracket from '../containers/bracket';
+import TournamentBracket from '../containers/bracket';
 
 class MainContent extends Component {
     render() {
@@ -22,7 +22,7 @@ class MainContent extends Component {
             WrappedBracket = function (props) {
                 // Конструкция "{...props}" нужна, чтобы не потерять
                 // параметры, переданные от компонента Route
-                return (<Bracket {...props} tournament={tournament}/>);
+                return (<TournamentBracket {...props} tournament={tournament}/>);
             };
 
         return (

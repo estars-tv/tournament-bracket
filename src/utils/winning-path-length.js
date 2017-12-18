@@ -1,10 +1,10 @@
 import _ from 'underscore';
 
 export default function winningPathLength(game, visited = {}) {
-    if (visited[ game.id ]) {
+    if (visited[game.id]) {
         return 0;
     }
-    visited[ game.id ] = true;
+    visited[game.id] = true;
 
     return (
         1 + (
@@ -13,8 +13,9 @@ export default function winningPathLength(game, visited = {}) {
                     Math,
                     _.map(
                         game.sides,
-                        ({ seed }) => (seed != null && seed.sourceGame != null && seed.rank == 1) ?
-                            winningPathLength(seed.sourceGame, visited) : 0
+                        // ({ seed }) => (seed != null && seed.sourceGame != null && seed.rank == 1) ?
+                        ({sourceGame}) => (sourceGame != null) ?
+                            winningPathLength(sourceGame, visited) : 0
                     )
                 ) :
                 0
