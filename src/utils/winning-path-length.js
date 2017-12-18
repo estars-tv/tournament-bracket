@@ -14,7 +14,7 @@ export default function winningPathLength(game, visited = {}) {
                     _.map(
                         game.sides,
                         // ({ seed }) => (seed != null && seed.sourceGame != null && seed.rank == 1) ?
-                        ({sourceGame}) => (sourceGame != null) ?
+                        ({sourceGame}) => (sourceGame !== null) ?
                             winningPathLength(sourceGame, visited) : 0
                     )
                 ) :

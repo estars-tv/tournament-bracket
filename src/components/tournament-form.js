@@ -66,8 +66,8 @@ class CreateTournament extends Component {
             teamsCount = teamsArr.length;
             bracketTeamsLimit = bracketConsts.BRACKET_LIMITS.find((element) => element >= teamsCount);
 
-            console.log('teamsCount', teamsCount);
-            console.log('bracketTeamsLimit', bracketTeamsLimit);
+            // console.log('teamsCount', teamsCount);
+            // console.log('bracketTeamsLimit', bracketTeamsLimit);
 
             return bracketTeamsLimit;
         }
@@ -79,15 +79,15 @@ class CreateTournament extends Component {
         function drawTeams() {
             const emptyTeams = bracketTeamsLimit - teamsCount;
 
-            console.log('drawTeams func');
-            console.log('bracketTeamsLimit', teamsCount);
-            console.log('teamsCount', teamsCount);
-            console.log('emptyTeams', emptyTeams);
+            // console.log('drawTeams func');
+            // console.log('bracketTeamsLimit', teamsCount);
+            // console.log('teamsCount', teamsCount);
+            // console.log('emptyTeams', emptyTeams);
 
             if (emptyTeams > 0) {
                 const firstEmptyPosition = bracketTeamsLimit / 2 - emptyTeams + 2;
 
-                console.log('firstEmptyPosition', firstEmptyPosition);
+                // console.log('firstEmptyPosition', firstEmptyPosition);
 
                 return addEmptyTeams(emptyTeams, firstEmptyPosition);
             } else {
@@ -108,7 +108,7 @@ class CreateTournament extends Component {
                 firstEmptyPosition = firstEmptyPosition + 2;
             }
 
-            console.log('addEmptyTeams', teamsArr);
+            // console.log('addEmptyTeams', teamsArr);
 
             return teamsArr;
         }
@@ -168,7 +168,7 @@ class CreateTournament extends Component {
             console.debug('countMatches', countMatches);
             console.debug('matchesCounter', matchesCounter);
 
-            let matchIdIncrement = matchesCounter;
+            let matchIdIncrement = countMatches;
 
             for (let i = 1; i < matchesCounter; i++) {
                 const prevTour = tours[i - 1],
@@ -187,51 +187,35 @@ class CreateTournament extends Component {
                         secondMath = prevTour[t + 1],
                         firstMatchWinner = getMatchWinner(firstMatch),
                         secondMatchWinner = getMatchWinner(secondMath);
+
                     //
                     // console.log('countMatches', countMatches);
                     // console.log('matches.length', matches.length);
 
                     nextMatch.id = matchIdIncrement;
+                    nextMatch.sides = {
+                        teamOwner: {
+                            name: null,
+                            score: null,
+                            sourceGame: null
+                        },
+                        teamGuest: {
+                            name: null,
+                            score: null,
+                            sourceGame: null
+                        }
+                    };
+                    nextMatch.sides.teamOwner.name = getMatchWinner(firstMatch);
+                    nextMatch.sides.teamGuest.name = getMatchWinner(secondMath);
 
                     if (firstMatchWinner === teamsConsts.EMPTY_TEAM_NAME) {
-                        nextMatch.sides = {
-                            teamOwner: {
-                                name: teams[0],
-                                score: 0
-                            },
-                            teamGuest: {
-                                name: teams[1],
-                                score: 1
-                            }
-                        };
+                        nextMatch.sides.teamOwner.score = 0;
+                        nextMatch.sides.teamGuest.score = 1;
                     } else if (secondMatchWinner === teamsConsts.EMPTY_TEAM_NAME) {
-                        nextMatch.sides = {
-                            teamOwner: {
-                                name: teams[0],
-                                score: 1
-                            },
-                            teamGuest: {
-                                name: teams[1],
-                                score: 0
-                            }
-                        };
-                    } else {
-                        nextMatch.sides = {
-                            teamOwner: {
-                                name: firstMatchWinner,
-                                score: null
-                            },
-                            teamGuest: {
-                                name: secondMatchWinner,
-                                score: null
-                            }
-                        };
+                        nextMatch.sides.teamOwner.score = 1;
+                        nextMatch.sides.teamGuest.score = 0;
                     }
 
-                    //
-                    // nextMatch.sides.teamOwner = getMatchWinner(firstMatch);
-                    // nextMatch.sides.teamGuest = getMatchWinner(secondMath);
-debugger;
                     tours[i].push(nextMatch);
                     // matches.push(nextMatch);
 
@@ -313,7 +297,7 @@ debugger;
                     tours = generateTours(matches),
                     bracketModel = modelToGraph(tours);
 
-                // console.log('matches', matches);
+                console.log('matches', matches);
                 // console.log('tours', tours);
 
                 actions.changeTitle(tournamentName.value);
