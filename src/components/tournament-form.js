@@ -179,9 +179,6 @@ class CreateTournament extends Component {
                 const prevTour = tours[i - 1],
                     prevTourMatches = prevTour.length;
 
-                console.log('prevTour', prevTour);
-                console.log('prevTourMatches', prevTourMatches);
-
                 tours[i] = [];
 
                 let t = 0;
@@ -191,30 +188,29 @@ class CreateTournament extends Component {
                         firstMatch = prevTour[t],
                         secondMath = prevTour[t + 1],
                         firstMatchWinner = getMatchWinner(firstMatch),
-                        secondMatchWinner = getMatchWinner(secondMath);
-
-                    console.log('firstMatchWinner', firstMatchWinner);
-                    console.log('secondMatchWinner', secondMatchWinner);
-
-                    //
-                    // console.log('countMatches', countMatches);
-                    // console.log('matches.length', matches.length);
+                        secondMatchWinner = getMatchWinner(secondMath),
+                        firstMatchSource = firstMatch.id,
+                        secondMatchSource = secondMath.id;
 
                     nextMatch.id = matchIdIncrement;
+
                     nextMatch.sides = {
                         teamOwner: {
                             name: null,
                             score: null,
-                            sourceGame: null
+                            sourceGame: {} //мб будут проблемы, тут был изначально null
                         },
                         teamGuest: {
                             name: null,
                             score: null,
-                            sourceGame: null
+                            sourceGame: {}
                         }
                     };
-                    nextMatch.sides.teamOwner.name = getMatchWinner(firstMatch);
-                    nextMatch.sides.teamGuest.name = getMatchWinner(secondMath);
+
+                    nextMatch.sides.teamOwner.name = firstMatchWinner;
+                    nextMatch.sides.teamGuest.name = secondMatchWinner;
+                    nextMatch.sides.teamOwner.sourceGame['@ref'] = firstMatchSource;
+                    nextMatch.sides.teamGuest.sourceGame['@ref'] = secondMatchSource;
 
                     if (firstMatchWinner === teamsConsts.EMPTY_TEAM_NAME) {
                         nextMatch.sides.teamOwner.score = 0;
