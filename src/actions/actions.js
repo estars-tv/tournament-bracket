@@ -14,7 +14,7 @@ function changeTitle(title) {
     };
 }
 
-function createTournament(name, type, teams, tours) {
+function createTournament(name, type, teams, tours, bracketModel) {
     const tournamentType = parseInt(type),
         teamsCounter = teams.length;
 
@@ -24,7 +24,8 @@ function createTournament(name, type, teams, tours) {
         tournamentType: tournamentType,
         teams: teams,
         counter: teamsCounter,
-        tours: tours
+        tours: tours,
+        bracketModel: bracketModel
     };
 }
 

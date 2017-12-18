@@ -8,8 +8,7 @@ const teams = {
 };
 
 const tours = {
-    DEFAULT_TOUR_NAME: 'Tour {0}',
-
+    DEFAULT_TOUR_NAME: 'Tour {0}'
 };
 
 const bracket = {

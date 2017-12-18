@@ -7,7 +7,8 @@ const initialState = {
             type: null,
             teams: [],
             counter: 0,
-            tours: []
+            tours: [],
+            bracketModel: []
         }
     },
     toursState = {

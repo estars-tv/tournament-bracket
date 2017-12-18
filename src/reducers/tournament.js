@@ -5,7 +5,8 @@ const initialState = {
     type: null,
     teams: [],
     counter: 0,
-    tours: []
+    tours: [],
+    bracketModel: []
 };
 
 export default function tournament(state = initialState, action) {
@@ -17,7 +18,8 @@ export default function tournament(state = initialState, action) {
                 type: action.tournamentType,
                 teams: action.teams,
                 counter: action.counter,
-                tours: action.tours
+                tours: action.tours,
+                bracketModel: action.bracketModel
             };
 
         default:

@@ -119,13 +119,13 @@ class CreateTournament extends Component {
          * @return {Array}
          */
         function generateMatches(teamsList) {
-            console.log('teamsList');
+            console.log('teamsList', teamsList);
 
             const matches = [],
                 teams = teamsList.slice();
 
             // console.log(teams);
-            // console.log(teams.length);
+            console.log('teams count', teams.length);
 
             for (let i = 0; i < teamsList.length / 2; i++) {
                 // console.log(matches);
@@ -145,11 +145,20 @@ class CreateTournament extends Component {
         function generateTours(matches) {
             //TODO se de зависимость
             const tours = [matches],
-                countMatches = matches.length;
+                countMatches = matches.length,
+                matchesCounter = teamsConsts.MIN_TEAMS_COUNTER / 2 === countMatches ? countMatches / 2 + 1 : countMatches / 2;
+            console.debug('teamsConsts.MIN_TEAMS_COUNTER', teamsConsts.MIN_TEAMS_COUNTER);
 
-            let matchIdIncrement = countMatches;
+            alert(3224);
+            debugger;
+            console.debug('matches', matches);
+            console.debug('tours', tours);
+            console.debug('countMatches', countMatches);
+            console.debug('matchesCounter', matchesCounter);
 
-            for (let i = 1; i < countMatches / 2; i++) {
+            let matchIdIncrement = matchesCounter;
+
+            for (let i = 1; i < matchesCounter; i++) {
                 const prevTour = tours[i - 1],
                     prevTourMatches = prevTour.length;
 
@@ -215,6 +224,30 @@ class CreateTournament extends Component {
             return match[notEmpty[hasEmpty(match)]] || teamsConsts.MATCH_WINNER.toValue(match.id);
         }
 
+        /**
+         * @name modelToGraph - преобразование модели в граф
+         * @param tours
+         * @return {Array}
+         */
+        function modelToGraph(tours) {
+            const model = [];
+
+            for (let i = 0; i < tours.length; i++) {
+                for (const key in tours[i]) {
+                    if (Object.prototype.hasOwnProperty.call(tours[i], key)) {
+                        const obj = {
+                            '@id': tours[i][key].id,
+                            'tour': i
+                        };
+
+                        model.push(Object.assign(obj, tours[i][key]));
+                    }
+                }
+            }
+
+            return model;
+        }
+
         function handleSubmit(e) {
             e.preventDefault();
 
@@ -226,13 +259,14 @@ class CreateTournament extends Component {
             if (checkTeams(teams.value)) {
                 const teamsList = drawTeams(),
                     matches = generateMatches(teamsList),
-                    tours = generateTours(matches);
+                    tours = generateTours(matches),
+                    bracketModel = modelToGraph(tours);
 
                 // console.log('matches', matches);
                 // console.log('tours', tours);
 
                 actions.changeTitle(tournamentName.value);
-                actions.createTournament(tournamentName.value, tournamentType.value, teamsList, tours);
+                actions.createTournament(tournamentName.value, tournamentType.value, teamsList, tours, bracketModel);
                 actions.displayError('');
 
                 redirect = true;
