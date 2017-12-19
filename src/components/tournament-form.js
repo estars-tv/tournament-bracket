@@ -245,30 +245,32 @@ class CreateTournament extends Component {
         }
 
         /**
-         * @name hasEmpty - проверка на пустую команду в матче
-         * @param match - матч
-         * @return {*} - [ключ] teamGuest/teamOwner пустой команды
-         */
-        function hasEmpty(match) {
-            return Object.keys(match).find(function (key) {
-                const isEmpty = match[key] === teamsConsts.EMPTY_TEAM_NAME;
-
-                if (isEmpty) return key;
-            });
-        }
-
-        /**
          * @name getMatchWinner - получение победителя в матче
          * @param match - матч
          * @return {String}
          */
         function getMatchWinner(match) {
             const notEmpty = {
-                teamGuest: 'teamOwner',
-                teamOwner: 'teamGuest'
-            };
+                    teamGuest: 'teamOwner',
+                    teamOwner: 'teamGuest'
+                },
+                tba = teamsConsts.EMPTY_TEAM_NAME,
+                sides = match.sides,
+                teamGuest = sides.teamGuest,
+                teamOwner = sides.teamOwner;
 
-            return match[notEmpty[hasEmpty(match)]] || teamsConsts.MATCH_WINNER.toValue(match.id);
+            if (teamGuest && teamOwner) {
+                return teamGuest.name === tba ? sides[notEmpty['teamGuest']].name : teamOwner.name === tba ?
+                    sides[notEmpty['teamOwner']].name : teamsConsts.MATCH_WINNER.toValue(match.id);
+
+                // if (teamGuest.name === tba) {
+                //     return sides[notEmpty['teamGuest']].name;
+                // } else if (teamOwner.name === tba) {
+                //     return sides[notEmpty['teamOwner']].name;
+                // } else {
+                //     return teamsConsts.MATCH_WINNER.toValue(match.id);
+                // }
+            }
         }
 
         /**
