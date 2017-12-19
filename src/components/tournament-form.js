@@ -153,8 +153,6 @@ class CreateTournament extends Component {
                     }
                 });
 
-                debugger;
-
                 teams.splice(0, 2);
             }
 

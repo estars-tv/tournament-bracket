@@ -88,120 +88,236 @@ import BracketGenerator from '../components/bracket-generator';
 // team80
 
 
-// const DEMO_DATA = [
-//     {
-//         "@id": "0",
-//         "id": "0",
-//         "sides": {
-//             "teamGuest": {
-//                 "name": 'team1',
-//                 "score": 21,
-//                 "sourceGame": null
-//             },
-//             "teamOwner": {
-//                 "name": 'team2',
-//                 "score": 42,
-//                 "sourceGame": null
-//             }
-//         }
-//     },
-//     {
-//         "@id": "1",
-//         "id": "1",
-//         "sides": {
-//             "teamGuest": {
-//                 "name": 'team3',
-//                 "score": 21,
-//                 "sourceGame": null
-//             },
-//             "teamOwner": {
-//                 "name": 'team3',
-//                 "score": 42,
-//                 "sourceGame": null
-//             }
-//         }
-//     },
-//     {
-//         "@id": "2",
-//         "id": "2",
-//         "sides": {
-//             "teamGuest": {
-//                 "name": 'team3',
-//                 "score": 21,
-//                 "sourceGame": null
-//             },
-//             "teamOwner": {
-//                 "name": 'team3',
-//                 "score": 42,
-//                 "sourceGame": null
-//             }
-//         }
-//     },
-//     {
-//         "@id": "3",
-//         "id": "3",
-//         "sides": {
-//             "teamGuest": {
-//                 "name": 'team3',
-//                 "score": 21,
-//                 "sourceGame": null
-//             },
-//             "teamOwner": {
-//                 "name": 'team3',
-//                 "score": 42,
-//                 "sourceGame": null
-//             }
-//         }
-//     },
-//     {
-//         "@id": "4",
-//         "id": "4",
-//         "sides": {
-//             "teamGuest": {
-//                 "name": 'team3',
-//                 "score": 42,
-//                 "sourceGame": {"@ref": "0"}
-//             },
-//             "teamOwner": {
-//                 "name": 'team3',
-//                 "score": 42,
-//                 "sourceGame": {"@ref": "1"}
-//             }
-//         }
-//     },
-//     {
-//         "@id": "5",
-//         "id": "5",
-//         "sides": {
-//             "teamGuest": {
-//                 "name": 'team3',
-//                 "score": 42,
-//                 "sourceGame": {"@ref": "2"}
-//             },
-//             "teamOwner": {
-//                 "name": 'team3',
-//                 "score": 42,
-//                 "sourceGame": {"@ref": "3"}
-//             }
-//         }
-//     },
-//     {
-//         "@id": "6",
-//         "id": "6",
-//         "sides": {
-//             "teamGuest": {
-//                 "name": 'team3',
-//                 "score": 42,
-//                 "sourceGame": {"@ref": "4"}
-//             },
-//             "teamOwner": {
-//                 "name": 'team3',
-//                 "score": 42,
-//                 "sourceGame": {"@ref": "5"}
-//             }
-//         }
-//     }
-// ];
+const DEMO_DATA = {
+    upper: [
+        {
+            "@id": "0",
+            "id": "0",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team1',
+                    "score": 21,
+                    "sourceGame": null
+                },
+                "teamOwner": {
+                    "name": 'team2',
+                    "score": 42,
+                    "sourceGame": null
+                }
+            }
+        },
+        {
+            "@id": "1",
+            "id": "1",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team3',
+                    "score": 21,
+                    "sourceGame": null
+                },
+                "teamOwner": {
+                    "name": 'team4',
+                    "score": 42,
+                    "sourceGame": null
+                }
+            }
+        },
+        {
+            "@id": "2",
+            "id": "2",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team5',
+                    "score": 21,
+                    "sourceGame": null
+                },
+                "teamOwner": {
+                    "name": 'team6',
+                    "score": 42,
+                    "sourceGame": null
+                }
+            }
+        },
+        {
+            "@id": "3",
+            "id": "3",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team7',
+                    "score": 21,
+                    "sourceGame": null
+                },
+                "teamOwner": {
+                    "name": 'team8',
+                    "score": 42,
+                    "sourceGame": null
+                }
+            }
+        },
+        {
+            "@id": "4",
+            "id": "4",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team2',
+                    "score": 32,
+                    "sourceGame": {"@ref": "0"}
+                },
+                "teamOwner": {
+                    "name": 'team4',
+                    "score": 42,
+                    "sourceGame": {"@ref": "1"}
+                }
+            }
+        },
+        {
+            "@id": "5",
+            "id": "5",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team6',
+                    "score": '42',
+                    "sourceGame": {"@ref": "2"}
+                },
+                "teamOwner": {
+                    "name": 'team8',
+                    "score": '0',
+                    "sourceGame": {"@ref": "3"}
+                }
+            }
+        },
+        {
+            "@id": "6",
+            "id": "6",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team4',
+                    "score": '42',
+                    "sourceGame": {"@ref": "4"}
+                },
+                "teamOwner": {
+                    "name": 'team6',
+                    "score": '16',
+                    "sourceGame": {"@ref": "5"}
+                }
+            }
+        }
+    ],
+    lower: [
+        {
+            "@id": "7",
+            "id": "7",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team5',
+                    "score": 21,
+                    "sourceGame": null
+                },
+                "teamOwner": {
+                    "name": 'team7',
+                    "score": 42,
+                    "sourceGame": null
+                }
+            }
+        },
+        {
+            "@id": "8",
+            "id": "8",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team1',
+                    "score": 21,
+                    "sourceGame": null
+                },
+                "teamOwner": {
+                    "name": 'team3',
+                    "score": 42,
+                    "sourceGame": null
+                }
+            }
+        },
+        {
+            "@id": "9",
+            "id": "9",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team5',
+                    "score": 21,
+                    "sourceGame": null
+                },
+                "teamOwner": {
+                    "name": 'team6',
+                    "score": 42,
+                    "sourceGame": null
+                }
+            }
+        },
+        {
+            "@id": "3",
+            "id": "3",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team7',
+                    "score": 21,
+                    "sourceGame": null
+                },
+                "teamOwner": {
+                    "name": 'team8',
+                    "score": 42,
+                    "sourceGame": null
+                }
+            }
+        },
+        {
+            "@id": "4",
+            "id": "4",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team2',
+                    "score": 32,
+                    "sourceGame": {"@ref": "0"}
+                },
+                "teamOwner": {
+                    "name": 'team4',
+                    "score": 42,
+                    "sourceGame": {"@ref": "1"}
+                }
+            }
+        },
+        {
+            "@id": "5",
+            "id": "5",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team6',
+                    "score": '42',
+                    "sourceGame": {"@ref": "2"}
+                },
+                "teamOwner": {
+                    "name": 'team8',
+                    "score": '0',
+                    "sourceGame": {"@ref": "3"}
+                }
+            }
+        },
+        {
+            "@id": "7",
+            "id": "7",
+            "sides": {
+                "teamGuest": {
+                    "name": 'team4',
+                    "score": '42',
+                    "sourceGame": {"@ref": "4"}
+                },
+                "teamOwner": {
+                    "name": 'team6',
+                    "score": '16',
+                    "sourceGame": {"@ref": "5"}
+                }
+            }
+        }
+    ]
+};
 
 // const GAMES = JSOG.decode(DEMO_DATA);
 // const ROOT = _.findWhere(GAMES, {'id': '6'});
@@ -228,8 +344,13 @@ class TournamentBracket extends Component {
         const tournament = this.props.tournament;
         const {gameComponent: GameComponent} = this;
 
+        // <Redirect to='/'/> : ниже там где сейчас первый div
+
         return tournament.tours.length === 0 ?
-            <Redirect to='/'/> :
+            <div>
+                <h1>bracket is there!</h1>
+                <BracketGenerator GameComponent={GameComponent} upper={JSOG.decode(DEMO_DATA).upper} lower={JSOG.decode(DEMO_DATA).lower}/>
+            </div> :
             <div>
                 <h1>bracket is there!</h1>
                 <BracketGenerator GameComponent={GameComponent} games={JSOG.decode(tournament.bracketModel)}/>

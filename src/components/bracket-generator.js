@@ -78,12 +78,19 @@ export default class BracketGenerator extends Component {
     };
 
     state = {
-        finals: makeFinals({games: this.props.games})
+        // finals: makeFinals({games: this.props.games})
+        finals: makeFinals({games: this.props.upper})
     };
 
-    componentWillReceiveProps({games}) {
-        if (games !== this.props.games) {
-            this.setState({finals: makeFinals({games})});
+    // componentWillReceiveProps({games}) {
+    //     if (games !== this.props.games) {
+    //         this.setState({finals: makeFinals({games})});
+    //     }
+    // }
+
+    componentWillReceiveProps({upper}) {
+        if (upper !== this.props.upper) {
+            this.setState({finals: makeFinals({upper})});
         }
     }
 
