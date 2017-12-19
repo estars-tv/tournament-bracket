@@ -123,33 +123,38 @@ class CreateTournament extends Component {
         function generateMatches(teamsList) {
             console.log('teamsList', teamsList);
 
-            //TODO score для матчей с TBA
-            //TODO почему-то пишет победитель матча N вместо того чтобы продвинуть команду, если попалась пустыкша
-
             const matches = [],
-                teams = teamsList.slice();
+                teams = teamsList.slice(),
+                tba = teamsConsts.EMPTY_TEAM_NAME;
 
             // console.log(teams);
             console.log('teams count', teams.length);
 
             for (let i = 0; i < teamsList.length / 2; i++) {
+                const firstTeam = teams[0],
+                    secondTeam = teams[1];
+
                 // console.log(matches);
                 // console.log('_teams', teams);
+
                 matches.push({
                     id: i,
                     sides: {
                         teamOwner: {
-                            name: teams[0],
-                            score: null,
+                            name: firstTeam,
+                            score: firstTeam === tba ? '0' : secondTeam === tba ? '1' : null,
                             sourceGame: null
                         },
                         teamGuest: {
-                            name: teams[1],
-                            score: null,
+                            name: secondTeam,
+                            score: secondTeam === tba ? '0' : firstTeam === tba ? '1' : null,
                             sourceGame: null
                         }
                     }
                 });
+
+                debugger;
+
                 teams.splice(0, 2);
             }
 
