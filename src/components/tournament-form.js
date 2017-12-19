@@ -123,6 +123,9 @@ class CreateTournament extends Component {
         function generateMatches(teamsList) {
             console.log('teamsList', teamsList);
 
+            //TODO score для матчей с TBA
+            //TODO почему-то пишет победитель матча N вместо того чтобы продвинуть команду, если попалась пустыкша
+
             const matches = [],
                 teams = teamsList.slice();
 
@@ -184,33 +187,31 @@ class CreateTournament extends Component {
                 let t = 0;
 
                 for (let n = 0; n < prevTourMatches / 2; n++) {
-                    const nextMatch = {},
-                        firstMatch = prevTour[t],
+                    const firstMatch = prevTour[t],
                         secondMath = prevTour[t + 1],
                         firstMatchWinner = getMatchWinner(firstMatch),
                         secondMatchWinner = getMatchWinner(secondMath),
                         firstMatchSource = firstMatch.id,
-                        secondMatchSource = secondMath.id;
-
-                    nextMatch.id = matchIdIncrement;
-
-                    nextMatch.sides = {
-                        teamOwner: {
-                            name: null,
-                            score: null,
-                            sourceGame: {} //мб будут проблемы, тут был изначально null
-                        },
-                        teamGuest: {
-                            name: null,
-                            score: null,
-                            sourceGame: {}
-                        }
-                    };
-
-                    nextMatch.sides.teamOwner.name = firstMatchWinner;
-                    nextMatch.sides.teamGuest.name = secondMatchWinner;
-                    nextMatch.sides.teamOwner.sourceGame['@ref'] = firstMatchSource;
-                    nextMatch.sides.teamGuest.sourceGame['@ref'] = secondMatchSource;
+                        secondMatchSource = secondMath.id,
+                        nextMatch = {
+                            id: matchIdIncrement,
+                            sides: {
+                                teamOwner: {
+                                    name: firstMatchWinner,
+                                    score: null,
+                                    sourceGame: {
+                                        '@ref': firstMatchSource
+                                    }
+                                },
+                                teamGuest: {
+                                    name: secondMatchWinner,
+                                    score: null,
+                                    sourceGame: {
+                                        '@ref': secondMatchSource
+                                    }
+                                }
+                            }
+                        };
 
                     if (firstMatchWinner === teamsConsts.EMPTY_TEAM_NAME) {
                         nextMatch.sides.teamOwner.score = 0;
@@ -242,21 +243,6 @@ class CreateTournament extends Component {
 
             return tours;
         }
-
-        // console.log('toursLimit', toursLimit());
-        console.log('bracketLimit(teamsArr)', bracketLimit(teamsArr));
-        console.log('teamsCount', teamsCount);
-        console.log('bracketTeamsLimit', bracketTeamsLimit);
-
-        // function toursLimit() {
-        //     let limit = 0;
-        //
-        //     while (bracketLimit(teamsArr) / 2 >= 2) {
-        //         limit++;
-        //     }
-        //
-        //     return limit;
-        // }
 
         /**
          * @name hasEmpty - проверка на пустую команду в матче
