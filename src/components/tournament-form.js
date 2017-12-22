@@ -276,6 +276,18 @@ class CreateTournament extends Component {
             }
         }
 
+        function getMatchLoser(match) {
+            const tba = teamsConsts.EMPTY_TEAM_NAME,
+                sides = match.sides,
+                teamGuest = sides.teamGuest,
+                teamOwner = sides.teamOwner;
+
+            if (teamGuest && teamOwner) {
+                return teamGuest.name === tba ? sides['teamGuest'].name : teamOwner.name === tba ?
+                    sides['teamOwner'].name : teamsConsts.MATCH_LOSER.toValue(match.id);
+            }
+        }
+
         /**
          * @name modelToGraph - преобразование модели в граф
          * @param tours
@@ -300,6 +312,59 @@ class CreateTournament extends Component {
             return model;
         }
 
+        function generateDE(tours) {
+            const countTours = tours.length,
+                toursDE = tours.slice();
+
+            for (let i = 1; i < countTours; i++) {
+                const countCurrentTour = tours[i].length,
+                    prevTour = tours[i - 1],
+                    countPrevTour = prevTour.length;
+
+                let matchIdIncrement = countPrevTour;
+
+                for (let n = 0; n < countPrevTour; n += 2) {
+                    const firstMatch = prevTour[n],
+                        secondMath = prevTour[n + 1],
+                        firstMatchLoser = getMatchLoser(firstMatch),
+                        secondMatchLoser = getMatchLoser(secondMath),
+                        firstMatchSource = firstMatch.id,
+                        secondMatchSource = secondMath.id,
+                        nextMatch = {
+                            id: matchIdIncrement,
+                            sides: {
+                                teamOwner: {
+                                    name: firstMatchLoser,
+                                    score: null,
+                                    sourceGame: null
+                                    // sourceGame: {
+                                    //     '@ref': firstMatchSource
+                                    // }
+                                },
+                                teamGuest: {
+                                    name: secondMatchLoser,
+                                    score: null,
+                                    sourceGame: null
+                                    // sourceGame: {
+                                    //     '@ref': secondMatchSource
+                                    // }
+                                }
+                            }
+                        };
+
+                    toursDE[i].push(nextMatch);
+
+                    matchIdIncrement++;
+                }
+
+                console.log('toursDE', toursDE);
+
+                // for (let n = 0; n < countCurrentTour; n++) {
+                //     const prevTour = tours[i - 1];
+                // }
+            }
+        }
+
         function handleSubmit(e) {
             e.preventDefault();
 
@@ -309,10 +374,15 @@ class CreateTournament extends Component {
 
             //todo проверку на заполненость полей
             if (checkTeams(teams.value)) {
+                const isDouble = true;
+
                 const teamsList = drawTeams(),
                     matches = generateMatches(teamsList),
+                    // tours = isDouble ? generateDE(generateTours(matches)) : generateTours(matches),
                     tours = generateTours(matches),
                     bracketModel = modelToGraph(tours);
+
+                generateDE(tours);
 
                 console.log('matches', matches);
                 // console.log('tours', tours);

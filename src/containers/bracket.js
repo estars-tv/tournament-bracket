@@ -505,6 +505,12 @@ import BracketGenerator from '../components/bracket-generator';
 
 // дабл на 8
 
+//teams = 8
+// teams / 2 = 4; матчей изначально
+// 12 матчей всего
+// первые up 4 = null, up 2 = ref, d 2 = null, up 1 ref, d 1 ref, d 1 ref null, final 1 ref ref;
+// teams / 2
+
 const DEMO_DATA = {
     upper: [
         {
