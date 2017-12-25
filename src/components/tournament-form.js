@@ -5,7 +5,7 @@ import {Redirect} from 'react-router-dom';
 
 import * as actions from '../actions/actions';
 import {removeEmptyElements} from '../utils';
-import {teams as teamsConsts, bracket as bracketConsts} from '../constants/bracket';
+import {bracket as bracketConsts, teams as teamsConsts} from '../constants/bracket';
 
 let redirect = false;
 
@@ -170,34 +170,38 @@ class CreateTournament extends Component {
                 countMatches = matches.length,
                 matchesCounter = teamsConsts.MIN_TEAMS_COUNTER / 2 === countMatches ? countMatches / 2 + 1 : countMatches / 2;
 
-            console.debug('teamsConsts.MIN_TEAMS_COUNTER', teamsConsts.MIN_TEAMS_COUNTER);
+            // console.debug('teamsConsts.MIN_TEAMS_COUNTER', teamsConsts.MIN_TEAMS_COUNTER);
             console.debug('matches', matches);
             console.debug('tours', tours);
-            console.debug('countMatches', countMatches);
-            console.debug('matchesCounter', matchesCounter);
+            // console.debug('countMatches', countMatches);
+            // console.debug('matchesCounter', matchesCounter);
 
             let matchIdIncrement = countMatches,
                 toursDecrement = countMatches,
                 i = 1;
 
-            // for (let i = 1; i < matchesCounter; i++) {
             while (toursDecrement / 2 >= 1) {
-                const prevTour = tours[i - 1],
-                    prevTourMatches = prevTour.length;
-
-                tours[i] = [];
+                const lastTour = tours[i - 1],
+                    lastTourMatches = lastTour.length;
 
                 let t = 0;
 
-                for (let n = 0; n < prevTourMatches / 2; n++) {
-                    const firstMatch = prevTour[t],
-                        secondMath = prevTour[t + 1],
+                tours[i] = [];
+
+                for (let n = 0; n < lastTourMatches / 2; n++) {
+                    const firstMatch = lastTour[t],
+                        secondMath = lastTour[t + 1],
                         firstMatchWinner = getMatchWinner(firstMatch),
                         secondMatchWinner = getMatchWinner(secondMath),
+                        firstMatchLoser = getMatchLoser(firstMatch),
+                        secondMatchLoser = getMatchLoser(secondMath),
                         firstMatchSource = firstMatch.id,
                         secondMatchSource = secondMath.id,
-                        nextMatch = {
-                            id: matchIdIncrement,
+                        winnersId = tours[i].length > 0 ?
+                            tours[i][tours[i].length - 1].id + 1 : lastTour[lastTourMatches - 1].id + 1,
+                        losersId = winnersId + 1,
+                        winners = {
+                            id: winnersId,
                             sides: {
                                 teamOwner: {
                                     name: firstMatchWinner,
@@ -214,21 +218,43 @@ class CreateTournament extends Component {
                                     }
                                 }
                             }
+                        },
+                        losers = {
+                            id: losersId,
+                            sides: {
+                                teamOwner: {
+                                    name: firstMatchLoser,
+                                    score: null,
+                                    sourceGame: null
+                                    // sourceGame: {
+                                    //     '@ref': firstMatchSource
+                                    // }
+                                },
+                                teamGuest: {
+                                    name: secondMatchLoser,
+                                    score: null,
+                                    sourceGame: null
+                                    // sourceGame: {
+                                    //     '@ref': secondMatchSource
+                                    // }
+                                }
+                            }
                         };
 
                     if (firstMatchWinner === teamsConsts.EMPTY_TEAM_NAME) {
-                        nextMatch.sides.teamOwner.score = 0;
-                        nextMatch.sides.teamGuest.score = 1;
+                        winners.sides.teamOwner.score = 0;
+                        winners.sides.teamGuest.score = 1;
                     } else if (secondMatchWinner === teamsConsts.EMPTY_TEAM_NAME) {
-                        nextMatch.sides.teamOwner.score = 1;
-                        nextMatch.sides.teamGuest.score = 0;
+                        winners.sides.teamOwner.score = 1;
+                        winners.sides.teamGuest.score = 0;
                     }
 
-                    console.log('tours', tours);
-                    console.log('i', i);
-                    console.log('nextMatch', nextMatch);
+                    // console.log('tours', tours);
+                    // console.log('i', i);
+                    // console.log('nextMatch', nextMatch);
 
-                    tours[i].push(nextMatch);
+                    tours[i].push(winners);
+                    tours[i].push(losers);
                     // matches.push(nextMatch);
 
                     // console.log('i', i);
@@ -241,7 +267,70 @@ class CreateTournament extends Component {
                 i++;
             }
 
+            const currentLastTour = tours.length - 1,
+                lastTour = tours[currentLastTour];
+
+            console.log('lastTour', lastTour);
+
+            if (lastTour.length === 2) {
+                //финал лузеров
+                const winnersMatch = lastTour[0],
+                    losersMath = lastTour[1],
+                    winnersMatchLoser = getMatchLoser(winnersMatch),
+                    winnersMatchWinner = getMatchWinner(winnersMatch),
+                    losersMatchWinner = getMatchWinner(losersMath),
+                    losersFinal = {
+                        id: losersMath.id + 1,
+                        sides: {
+                            teamOwner: {
+                                name: winnersMatchLoser,
+                                score: null,
+                                sourceGame: null
+                            },
+                            teamGuest: {
+                                name: losersMatchWinner,
+                                score: null,
+                                sourceGame: {
+                                    '@ref': losersMath.id
+                                }
+                            }
+                        }
+                    },
+                    final = {
+                        id: losersMath.id + 2,
+                        sides: {
+                            teamOwner: {
+                                name: winnersMatchWinner,
+                                score: null,
+                                sourceGame: {
+                                    '@ref': winnersMatch.id
+                                }
+                            },
+                            teamGuest: {
+                                name: getMatchWinner(losersFinal),
+                                score: null,
+                                sourceGame: {
+                                    '@ref': losersMath.id + 1
+                                }
+                            }
+                        }
+                    };
+
+                tours[currentLastTour].push(losersFinal);
+
+                //final
+
+                // tours[currentLastTour + 1] = [];
+                // tours.push(final);
+
+                tours[currentLastTour + 1] = [final];
+            }
+
+            // generateFinal(tours);
+
             console.log('tours', tours);
+            // console.log('upper', upper);
+            // console.log('lower', lower);
             // console.log('matches', matches);
 
             return tours;
@@ -305,6 +394,7 @@ class CreateTournament extends Component {
                         };
 
                         model.push(Object.assign(obj, tours[i][key]));
+                        debugger;
                     }
                 }
             }
@@ -312,9 +402,18 @@ class CreateTournament extends Component {
             return model;
         }
 
+        /**
+         * @name generateDE - генерация сетки Double Elimination
+         * @param {Array} tours - массив туров для сетки Single Elimination
+         */
         function generateDE(tours) {
             const countTours = tours.length,
-                toursDE = tours.slice();
+                toursDE = tours.slice(),
+                countMatches = tours.forEach(function (tour) {
+                    console.log('element', tour);
+                });
+
+            console.log('toursDE', toursDE);
 
             for (let i = 1; i < countTours; i++) {
                 const countCurrentTour = tours[i].length,
@@ -358,10 +457,26 @@ class CreateTournament extends Component {
                 }
 
                 console.log('toursDE', toursDE);
+            }
 
-                // for (let n = 0; n < countCurrentTour; n++) {
-                //     const prevTour = tours[i - 1];
-                // }
+            // generateFinal(toursDE);
+        }
+
+        function generateFinal(tours) {
+            const lastTour = tours[tours.length - 1],
+                countLastTour = lastTour.length;
+
+            if (countLastTour > 1) {
+                const newTours = tours.slice();
+
+                for (let i = 0; i < countLastTour; i++) {
+                    const firstMatch = lastTour[i],
+                        secondMath = lastTour[i + 1],
+                        firstMatchLoser = getMatchWinner(firstMatch),
+                        secondMatchLoser = getMatchLoser(secondMath);
+                }
+            } else {
+                return tours;
             }
         }
 
@@ -382,9 +497,11 @@ class CreateTournament extends Component {
                     tours = generateTours(matches),
                     bracketModel = modelToGraph(tours);
 
-                generateDE(tours);
+                debugger;
 
-                console.log('matches', matches);
+                // generateDE(tours);
+
+                // console.log('matches', matches);
                 // console.log('tours', tours);
 
                 actions.changeTitle(tournamentName.value);

@@ -82,6 +82,8 @@ class BracketGame extends PureComponent {
 
         const {sides} = game;
 
+        debugger;
+
         const top = sides[homeOnTop ? teamOwner : teamGuest],
             bottom = sides[homeOnTop ? teamGuest : teamOwner];
 

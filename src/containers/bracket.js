@@ -511,8 +511,8 @@ import BracketGenerator from '../components/bracket-generator';
 // первые up 4 = null, up 2 = ref, d 2 = null, up 1 ref, d 1 ref, d 1 ref null, final 1 ref ref;
 // teams / 2
 
-const DEMO_DATA = {
-    upper: [
+const DEMO_DATA =
+    [
         {
             "@id": "0",
             "id": "0",
@@ -705,9 +705,7 @@ const DEMO_DATA = {
                 }
             }
         }
-    ],
-    lower: []
-};
+    ];
 
 
 // const GAMES = JSOG.decode(DEMO_DATA);
@@ -740,7 +738,7 @@ class TournamentBracket extends Component {
         return tournament.tours.length === 0 ?
             <div>
                 <h1>bracket is there!</h1>
-                <BracketGenerator GameComponent={GameComponent} upper={JSOG.decode(DEMO_DATA).upper} lower={JSOG.decode(DEMO_DATA).lower}/>
+                <BracketGenerator GameComponent={GameComponent} games={JSOG.decode(DEMO_DATA)}/>
             </div> :
             <div>
                 <h1>bracket is there!</h1>
