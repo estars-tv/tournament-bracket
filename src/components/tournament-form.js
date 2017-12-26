@@ -953,7 +953,7 @@ class CreateTournament extends Component {
                             const firstLoser = upper[i][n],
                                 secondLoser = upper[i][n + 1],
                                 firstLoserName = getMatchLoser(firstLoser),
-                                secondLoserName = getMatchWinner(secondLoser),
+                                secondLoserName = getMatchLoser(secondLoser),
                                 lastUpperTour = upper[upper.length - 1],
                                 lastUpperTourCount = lastUpperTour.length;
 
@@ -989,39 +989,45 @@ class CreateTournament extends Component {
                         }
                     }
                 } else {
-                    const lastLowerTour = lower[lower.length - 1],
-                        firstWinner = lastLowerTour[0],
-                        secondWinner = lastLowerTour[1],
-                        firstWinnerName = getMatchWinner(firstWinner),
-                        secondWinnerName = getMatchWinner(secondWinner);
+                    const lastLowerTour = lower[lower.length - 1].length;
+                    debugger;
 
-                    if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
+                    if (lastLowerTour > 1) {
+                        const lastLowerTour = lower[lower.length - 1],
+                            firstWinner = lastLowerTour[0],
+                            secondWinner = lastLowerTour[1],
+                            firstWinnerName = getMatchWinner(firstWinner),
+                            secondWinnerName = getMatchWinner(secondWinner);
 
-                    const winnersOfLosers = createMatch({
-                        id: matchIdIncrement,
-                        ownerName: firstWinnerName,
-                        guestName: secondWinnerName,
-                        ownerSource: {'@ref': firstWinner.id},
-                        guestSource: {'@ref': secondWinner.id}
-                    });
+                        if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
 
-                    tours.lower[i + 1].push(winnersOfLosers);
+                        tours.lower[i + 1].push(createMatch({
+                            id: matchIdIncrement,
+                            ownerName: firstWinnerName,
+                            guestName: secondWinnerName,
+                            ownerSource: {'@ref': firstWinner.id},
+                            guestSource: {'@ref': secondWinner.id}
+                        }));
 
-                    matchIdIncrement++;
+                        matchIdIncrement++;
+                    }
 
                     //финал лузеров
                     const lastUpperTour = upper[upper.length - 1],
                         upperLoser = lastUpperTour[0],
                         upperWinner = lastUpperTour[0],
+                        lastTour = lower[lower.length - 1],
+                        lastTourCount = lastTour.length,
+                        lowerWinner = lastTour[lastTourCount - 1],
                         upperLoserName = getMatchLoser(upperLoser),
                         upperWinnerName = getMatchWinner(upperWinner),
-                        lowerWinnerName = getMatchWinner(winnersOfLosers);
-
+                        lowerWinnerName = getMatchWinner(lowerWinner);
+debugger;
                     const losersFinal = createMatch({
                         id: matchIdIncrement,
                         ownerName: upperLoserName,
                         guestName: lowerWinnerName,
-                        guestSource: {'@ref': winnersOfLosers.id}
+                        guestSource: {'@ref': lowerWinner.id}
                     });
 
                     if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
