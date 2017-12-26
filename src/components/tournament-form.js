@@ -160,6 +160,138 @@ class CreateTournament extends Component {
         }
 
         /**
+         * @name generateLosers
+         * @param tours - туры виннеров
+         *
+         team1
+         team2
+         team3
+         team4
+         */
+        function generateLosers(tours) {
+            console.log('generateLosers tours', tours);
+
+            debugger;
+            const upperTours = tours.upper,
+                countTours = upperTours.length;
+
+            console.log('countTours', countTours);
+
+            for (let i = 0; i < countTours; i++) {
+                const upperTour = upperTours[countTours - 1],
+                    countUpperTour = upperTour.length;
+
+                tours.lower[i] = [];
+
+                debugger;
+
+                if (i === 0) {
+                    const firstWinnersTour = upperTours[0],
+                        countFirstWinnersTour = firstWinnersTour.length;
+
+                    for (let n = 0; n < countFirstWinnersTour / 2; n++) {
+                        const firstMatch = firstWinnersTour[n],
+                            secondMath = firstWinnersTour[n + 1],
+                            // firstMatchWinner = getMatchWinner(firstMatch),
+                            // secondMatchWinner = getMatchWinner(secondMath),
+                            firstMatchLoser = getMatchLoser(firstMatch),
+                            secondMatchLoser = getMatchLoser(secondMath),
+                            firstMatchSource = firstMatch.id,
+                            secondMatchSource = secondMath.id,
+                            winnersId = upperTours[i].length > 0 ?
+                                upperTours[i][upperTours[i].length - 1].id + 1 : firstWinnersTour[countFirstWinnersTour - 1].id + 1,
+                            losersId = winnersId + 1,
+                            losers = {
+                                id: losersId,
+                                sides: {
+                                    teamOwner: {
+                                        name: firstMatchLoser,
+                                        score: null,
+                                        sourceGame: null
+                                        // sourceGame: {
+                                        //     '@ref': firstMatchSource
+                                        // }
+                                    },
+                                    teamGuest: {
+                                        name: secondMatchLoser,
+                                        score: null,
+                                        sourceGame: null
+                                        // sourceGame: {
+                                        //     '@ref': secondMatchSource
+                                        // }
+                                    }
+                                }
+                            };
+
+                        tours.lower[i].push(losers);
+                    }
+                }
+
+                if (countUpperTour === 1 && i > 0) {
+                    debugger;
+
+                    /*если впервые в N туре количество матчей равно 1, то строим в такой последовательности:
+                    сверху снизу, и финал сверху снизу (для 4 команд не подходит из-за впервые,
+                        возможно спасет иф)*/
+
+                    function losersFinal() {
+                        console.log('tours', tours);
+                        console.log('upper', tours.upper);
+                        console.log('lower', tours.lower);
+                        console.log('upper w', tours.upper[i][0]);
+                        console.log('lower w', tours.lower[i - 1][0]);
+
+                        const losersMatch = tours.lower[i - 1][0],
+                            winnersMatch = tours.upper[i][0],
+                            firstMatchWinner = getMatchWinner(losersMatch),
+                            secondMatchWinner = getMatchWinner(winnersMatch),
+                            firstMatchSource = losersMatch.id,
+                            secondMatchSource = winnersMatch.id,
+                            winnersId = upperTours[i].length > 0 ?
+                                upperTours[i][upperTours[i].length - 1].id + 1 : losersMatch.id + 1,
+                            losersId = winnersId + 1,
+                            losers = {
+                                id: losersId,
+                                sides: {
+                                    teamOwner: {
+                                        name: firstMatchWinner,
+                                        score: null,
+                                        sourceGame: {
+                                            '@ref': firstMatchSource
+                                        }
+                                    },
+                                    teamGuest: {
+                                        name: secondMatchWinner,
+                                        score: null,
+                                        sourceGame: {
+                                            '@ref': secondMatchSource
+                                        }
+                                    }
+                                }
+                            };
+
+                        console.log('losers', losers);
+
+                        debugger;
+
+                        // if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
+
+                        // tours.lower[i + 1].push(losers);
+                        tours.lower[i].push(losers);
+                    }
+
+                    losersFinal();
+
+                    debugger;
+                } else if (countUpperTour > 1) {
+                    debugger;
+                }
+            }
+
+            console.log('losers tours', tours);
+        }
+
+        /**
          * @name generateTours - разделение на туры
          * @param matches - список начальных матчей
          * @return {Array}
@@ -254,7 +386,7 @@ class CreateTournament extends Component {
                     // console.log('nextMatch', nextMatch);
 
                     tours[i].push(winners);
-                    tours[i].push(losers);
+                    // tours[i].push(losers);
                     // matches.push(nextMatch);
 
                     // console.log('i', i);
@@ -268,63 +400,98 @@ class CreateTournament extends Component {
             }
 
             const currentLastTour = tours.length - 1,
-                lastTour = tours[currentLastTour];
+                lastTour = tours[currentLastTour],
+                countLastTour = lastTour.length;
 
             console.log('lastTour', lastTour);
 
-            if (lastTour.length === 2) {
-                //финал лузеров
-                const winnersMatch = lastTour[0],
-                    losersMath = lastTour[1],
-                    winnersMatchLoser = getMatchLoser(winnersMatch),
-                    winnersMatchWinner = getMatchWinner(winnersMatch),
-                    losersMatchWinner = getMatchWinner(losersMath),
-                    losersFinal = {
-                        id: losersMath.id + 1,
-                        sides: {
-                            teamOwner: {
-                                name: winnersMatchLoser,
-                                score: null,
-                                sourceGame: null
-                            },
-                            teamGuest: {
-                                name: losersMatchWinner,
-                                score: null,
-                                sourceGame: {
-                                    '@ref': losersMath.id
-                                }
-                            }
-                        }
-                    },
-                    final = {
-                        id: losersMath.id + 2,
-                        sides: {
-                            teamOwner: {
-                                name: winnersMatchWinner,
-                                score: null,
-                                sourceGame: {
-                                    '@ref': winnersMatch.id
-                                }
-                            },
-                            teamGuest: {
-                                name: getMatchWinner(losersFinal),
-                                score: null,
-                                sourceGame: {
-                                    '@ref': losersMath.id + 1
-                                }
-                            }
-                        }
-                    };
+            // if (countLastTour > 2) {
+            //     let winnerIterator = 0,
+            //         loserIterator  = 1;
+            //
+            //     for (let i = 0; i < countLastTour; i++) {
+            //         const winnersMatch = lastTour[winnerIterator],
+            //             losersMath = lastTour[loserIterator],
+            //             winnersMatchLoser = getMatchLoser(winnersMatch),
+            //             losersMatchWinner = getMatchWinner(losersMath),
+            //             match = {
+            //                 id: lastTour.length,
+            //                 sides: {
+            //                     teamOwner: {
+            //                         name: winnersMatchLoser,
+            //                         score: null,
+            //                         sourceGame: null
+            //                     },
+            //                     teamGuest: {
+            //                         name: losersMatchWinner,
+            //                         score: null,
+            //                         sourceGame: {
+            //                             '@ref': losersMath.id
+            //                         }
+            //                     }
+            //                 }
+            //             };
+            //
+            //         tours[currentLastTour].push(match);
+            //
+            //         winnerIterator += 2;
+            //         loserIterator += 2;
+            //     }
+            // }
 
-                tours[currentLastTour].push(losersFinal);
-
-                //final
-
-                // tours[currentLastTour + 1] = [];
-                // tours.push(final);
-
-                tours[currentLastTour + 1] = [final];
-            }
+            // if (countLastTour === 2) {
+            //     //финал лузеров
+            //     const winnersMatch = lastTour[0],
+            //         losersMath = lastTour[1],
+            //         winnersMatchLoser = getMatchLoser(winnersMatch),
+            //         winnersMatchWinner = getMatchWinner(winnersMatch),
+            //         losersMatchWinner = getMatchWinner(losersMath),
+            //         losersFinal = {
+            //             id: losersMath.id + 1,
+            //             sides: {
+            //                 teamOwner: {
+            //                     name: winnersMatchLoser,
+            //                     score: null,
+            //                     sourceGame: null
+            //                 },
+            //                 teamGuest: {
+            //                     name: losersMatchWinner,
+            //                     score: null,
+            //                     sourceGame: {
+            //                         '@ref': losersMath.id
+            //                     }
+            //                 }
+            //             }
+            //         },
+            //         final = {
+            //             id: losersMath.id + 2,
+            //             sides: {
+            //                 teamOwner: {
+            //                     name: winnersMatchWinner,
+            //                     score: null,
+            //                     sourceGame: {
+            //                         '@ref': winnersMatch.id
+            //                     }
+            //                 },
+            //                 teamGuest: {
+            //                     name: getMatchWinner(losersFinal),
+            //                     score: null,
+            //                     sourceGame: {
+            //                         '@ref': losersMath.id + 1
+            //                     }
+            //                 }
+            //             }
+            //         };
+            //
+            //     tours[currentLastTour].push(losersFinal);
+            //
+            //     //final
+            //
+            //     // tours[currentLastTour + 1] = [];
+            //     // tours.push(final);
+            //
+            //     tours[currentLastTour + 1] = [final];
+            // }
 
             // generateFinal(tours);
 
@@ -342,6 +509,7 @@ class CreateTournament extends Component {
          * @return {String}
          */
         function getMatchWinner(match) {
+            debugger;
             const notEmpty = {
                     teamGuest: 'teamOwner',
                     teamOwner: 'teamGuest'
@@ -350,6 +518,8 @@ class CreateTournament extends Component {
                 sides = match.sides,
                 teamGuest = sides.teamGuest,
                 teamOwner = sides.teamOwner;
+
+            console.log('winners match', match);
 
             if (teamGuest && teamOwner) {
                 return teamGuest.name === tba ? sides[notEmpty['teamGuest']].name : teamOwner.name === tba ?
@@ -383,18 +553,27 @@ class CreateTournament extends Component {
          * @return {Array}
          */
         function modelToGraph(tours) {
+            debugger;
             const model = [];
 
-            for (let i = 0; i < tours.length; i++) {
-                for (const key in tours[i]) {
-                    if (Object.prototype.hasOwnProperty.call(tours[i], key)) {
-                        const obj = {
-                            '@id': tours[i][key].id,
-                            'tour': i
-                        };
-
-                        model.push(Object.assign(obj, tours[i][key]));
+            for (const bracket in tours) {
+                debugger;
+                if (Object.prototype.hasOwnProperty.call(tours, bracket)) {
+                    for (let i = 0; i < tours[bracket].length; i++) {
                         debugger;
+                        for (const key in tours[bracket][i]) {
+                            debugger;
+                            if (Object.prototype.hasOwnProperty.call(tours[bracket][i], key)) {
+                                const obj = {
+                                    '@id': tours[bracket][i][key].id,
+                                    'tour': i
+                                };
+                                debugger;
+
+                                model.push(Object.assign(obj, tours[bracket][i][key]));
+                                debugger;
+                            }
+                        }
                     }
                 }
             }
@@ -494,8 +673,14 @@ class CreateTournament extends Component {
                 const teamsList = drawTeams(),
                     matches = generateMatches(teamsList),
                     // tours = isDouble ? generateDE(generateTours(matches)) : generateTours(matches),
-                    tours = generateTours(matches),
+                    tours = {
+                        upper: generateTours(matches),
+                        lower: []
+                    },
+                    losers = generateLosers(tours),
                     bracketModel = modelToGraph(tours);
+
+                console.log('tours onclick', tours);
 
                 debugger;
 
