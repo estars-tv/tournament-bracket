@@ -10,6 +10,8 @@ const makeFinals = ({games}) => {
         return id => Boolean(gameIdHash[id]);
     })();
 
+    debugger;
+
     const gamesFeedInto = _.map(
         games,
         game => ({
@@ -97,8 +99,6 @@ export default class BracketGenerator extends Component {
     render() {
         const {games, titleComponent: TitleComponent, style, ...rest} = this.props;
         const {finals} = this.state;
-
-        debugger;
 
         return (
             <div style={{display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', ...style}}>
