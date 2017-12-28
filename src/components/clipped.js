@@ -2,11 +2,7 @@ import React, {PropTypes, PureComponent} from 'react';
 import {v4} from 'uuid';
 
 export default class Clipped extends PureComponent {
-    // static propTypes = {
-    //     path: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.node)]).isRequired
-    // };
-
-    static defaultProps = {};
+   //todo propTypes
 
     _id = v4();
 
@@ -31,14 +27,7 @@ export default class Clipped extends PureComponent {
 };
 
 export class RectClipped extends PureComponent {
-    // static propTypes = {
-    //     x: PropTypes.number.isRequired,
-    //     y: PropTypes.number.isRequired,
-    //     width: PropTypes.number.isRequired,
-    //     height: PropTypes.number.isRequired
-    // };
-
-    static defaultProps = {};
+    //todo propTypes
 
     render() {
         const {x, y, width, height, children} = this.props;

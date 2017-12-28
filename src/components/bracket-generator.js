@@ -2,7 +2,6 @@ import React, {Component, PropTypes, PureComponent} from "react";
 import _ from "underscore";
 import Bracket from "./bracket";
 import winningPathLength from "../utils/winning-path-length";
-import GameShape from "./game-shape";
 
 const makeFinals = ({games}) => {
     const isInGroup = (() => {
@@ -22,7 +21,6 @@ const makeFinals = ({games}) => {
                     isInGroup(id) &&
                     _.any(
                         sides,
-                        // ({ seed }) => seed !== null && seed.sourceGame !== null && seed.rank === 1 && seed.sourceGame.id === game.id
                         ({sourceGame}) => sourceGame !== null && sourceGame.id === game.id
                     )
                 )
@@ -31,57 +29,28 @@ const makeFinals = ({games}) => {
     );
 
     return _.chain(gamesFeedInto)
-    // get the games that don't feed into anything else in the group, i.e. finals for this game group
+    // получаем игры без исходной игры
         .filter(({feedsInto}) => feedsInto.length === 0)
         .map(
-            // get their heights
+            // получаем высоту группы по игре без исходника
             game => ({
                 game,
                 height: winningPathLength(game)
             })
         )
-        // render the tallest bracket first
+        // строим от самой высокой (начальная игра без исходника)
         .sortBy(({height}) => height * -1)
         .value();
 };
 
 /**
- * The default title component used for each bracket, receives the game and the height of the bracket
- */
-class BracketTitle extends PureComponent {
-    // static propTypes = {
-    //     game: GameShape.isRequired,
-    //     height: PropTypes.number.isRequired
-    // };
-
-    render() {
-        const {game, height} = this.props;
-
-        return (
-            <h3 style={{textAlign: 'center'}}>
-                {game.bracketLabel || game.name} ({height} {height === 1 ? 'round' : 'rounds'})
-            </h3>
-        );
-    }
-}
-
-/**
- * Displays the brackets for some set of games sorted by bracket height
+ * Генерация игр осторитированных по высоте
  */
 export default class BracketGenerator extends Component {
-    // static propTypes = {
-    //     games: PropTypes.arrayOf(GameShape).isRequired,
-    //
-    //     titleComponent: PropTypes.func
-    // };
-
-    static defaultProps = {
-        titleComponent: BracketTitle
-    };
+    //todo propTypes
 
     state = {
         finals: makeFinals({games: this.props.games})
-        // finals: makeFinals({games: this.props.upper})
     };
 
     componentWillReceiveProps({games}) {
@@ -90,14 +59,8 @@ export default class BracketGenerator extends Component {
         }
     }
 
-    // componentWillReceiveProps({upper}) {
-    //     if (upper !== this.props.upper) {
-    //         this.setState({finals: makeFinals({upper})});
-    //     }
-    // }
-
     render() {
-        const {games, titleComponent: TitleComponent, style, ...rest} = this.props;
+        const {games, style, ...rest} = this.props;
         const {finals} = this.state;
 
         return (
@@ -107,7 +70,6 @@ export default class BracketGenerator extends Component {
                         finals,
                         ({game, height}) => (
                             <div key={game.id} style={{textAlign: 'center', flexGrow: 1, maxWidth: '100%'}}>
-                                <TitleComponent game={game} height={height}/>
                                 <div style={{maxWidth: '100%', overflow: 'auto', WebkitOverflowScrolling: 'touch'}}>
                                     <Bracket game={game} {...rest}/>
                                 </div>

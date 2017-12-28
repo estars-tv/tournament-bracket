@@ -5,7 +5,7 @@ import {Redirect} from 'react-router-dom';
 
 import * as actions from '../actions/actions';
 import {removeEmptyElements} from '../utils';
-import {bracket as bracketConsts, teams as teamsConsts} from '../constants/bracket';
+import {bracket as bracketConsts, teams as teamsConsts, tournament as tournamentConsts} from '../constants/bracket';
 
 let redirect = false;
 
@@ -15,8 +15,6 @@ class CreateTournament extends Component {
             error = this.props.page.errorLabel;
 
         console.log('props', this.props);
-
-        //TODO вынести все из рендера
 
         let tournamentName = '',
             tournamentType = null,
@@ -48,9 +46,6 @@ class CreateTournament extends Component {
             teamsCount = teamsArr.length;
             bracketTeamsLimit = bracketConsts.BRACKET_LIMITS.find((element) => element >= teamsCount);
 
-            // console.log('teamsCount', teamsCount);
-            // console.log('bracketTeamsLimit', bracketTeamsLimit);
-
             return bracketTeamsLimit;
         }
 
@@ -61,15 +56,8 @@ class CreateTournament extends Component {
         function drawTeams() {
             const emptyTeams = bracketTeamsLimit - teamsCount;
 
-            // console.log('drawTeams func');
-            // console.log('bracketTeamsLimit', teamsCount);
-            // console.log('teamsCount', teamsCount);
-            // console.log('emptyTeams', emptyTeams);
-
             if (emptyTeams > 0) {
                 const firstEmptyPosition = bracketTeamsLimit / 2 - emptyTeams + 2;
-
-                // console.log('firstEmptyPosition', firstEmptyPosition);
 
                 return addEmptyTeams(emptyTeams, firstEmptyPosition);
             } else {
@@ -90,8 +78,6 @@ class CreateTournament extends Component {
                 firstEmptyPosition = firstEmptyPosition + 2;
             }
 
-            // console.log('addEmptyTeams', teamsArr);
-
             return teamsArr;
         }
 
@@ -107,15 +93,9 @@ class CreateTournament extends Component {
                 teams = teamsList.slice(),
                 tba = teamsConsts.EMPTY_TEAM_NAME;
 
-            // console.log(teams);
-            console.log('teams count', teams.length);
-
             for (let i = 0; i < teamsList.length / 2; i++) {
                 const firstTeam = teams[0],
                     secondTeam = teams[1];
-
-                // console.log(matches);
-                // console.log('_teams', teams);
 
                 matches.push({
                     id: i,
@@ -148,9 +128,6 @@ class CreateTournament extends Component {
             //TODO se de зависимость
             const tours = [matches],
                 countMatches = matches.length;
-
-            console.debug('matches', matches);
-            console.debug('tours', tours);
 
             let matchIdIncrement = countMatches,
                 toursDecrement = countMatches,
@@ -240,6 +217,77 @@ class CreateTournament extends Component {
             }
         }
 
+//         function lowerBracket(tours) {
+//             console.log('tours', tours);
+//
+//             const countTours = tours.upper.length,
+//                 lastTour = tours.upper[countTours - 1],
+//                 countLastTour = lastTour.length,
+//                 lower = [];
+//
+//             let matchIdIterator = lastTour[countLastTour - 1].id + 1,
+//                 temp = [];
+//
+//             for (let i = 0; i < countTours; i++) {
+//                 let x = 2;
+// debugger;
+//                 while (x > 0) {
+//                     const countTour = tours.upper[i].length;
+// debugger;
+//                     for (let n = 0; n < countTour; countTour > 2 ? n++ : n += 2) {
+//                         const guest = x === 2 ? tours.upper[i][n] : lower.find((el) => {el.id === matchIdIterator}),
+//                             owner = x === 2 ? tours.upper[i][n + 1] : tours.upper[i + 1][n],  //todo
+//                             guestSource = i === 0 ? null : x === 2 ? {'@ref': guest.id} : null,
+//                             ownerSource = i === 0 ? null : x === 2 ? {'@ref': owner.id} : {'@ref': owner.id},
+//                             guestName = i === 0 ? getMatchLoser(guest) : x === 2 ? getMatchWinner(guest) : getMatchLoser(tours.upper[i][n]),
+//                             ownerName = i === 0 ? getMatchLoser(owner) : x === 2 ? getMatchWinner(owner) : getMatchWinner(tours.upper[i][n + 1]),
+//                             match = createMatch(
+//                                 {
+//                                     id: matchIdIterator,
+//                                     guestName: guestName,
+//                                     ownerName: ownerName,
+//                                     guestSource: guestSource,
+//                                     ownerSource: ownerSource
+//                                 }
+//                             );
+//
+//                         lower.push(match);
+//                         temp.push(match);
+//
+//                         matchIdIterator++;
+//                     }
+//
+//                     temp = [];
+//                     x--;
+//                 }
+//             }
+//
+//             (function final() {
+//                 const countLower = lower.length,
+//                     guest = lastTour[countLastTour - 1],
+//                     owner = lower[countLower - 1],
+//                     guestName = getMatchWinner(guest),
+//                     ownerName = getMatchWinner(owner),
+//                     finalMatch = createMatch(
+//                     {
+//                         id: matchIdIterator,
+//                         guestName: guestName,
+//                         ownerName: ownerName,
+//                         guestSource: guest.id,
+//                         ownerSource: owner.id
+//                     }
+//                 );
+//
+//                 lower.push(finalMatch);
+//             }());
+//
+//             tours.lower = lower;
+//         }
+
+        /**
+         * @name lowerBracket - построение нижней сетки
+         * @param tours
+         */
         function lowerBracket(tours) {
             const upper = tours.upper,
                 lower = tours.lower;
@@ -324,7 +372,7 @@ class CreateTournament extends Component {
                         upperLoserName = getMatchLoser(upperLoser),
                         upperWinnerName = getMatchWinner(upperWinner),
                         lowerWinnerName = getMatchWinner(lowerWinner);
-debugger;
+                    debugger;
                     const losersFinal = createMatch({
                         id: matchIdIncrement,
                         ownerName: upperLoserName,
@@ -426,20 +474,15 @@ debugger;
 
             //todo проверку на заполненость полей
             if (checkTeams(teams.value)) {
-                const isDouble = true;
-
                 const teamsList = drawTeams(),
                     matches = generateMatches(teamsList),
-                    // tours = isDouble ? generateDE(generateTours(matches)) : generateTours(matches),
-                    winners = generateTours(matches),
+                    upper = generateTours(matches),
                     tours = {
-                        upper: winners,
+                        upper: upper,
                         lower: []
                     };
-                // losers = generateLosers(tours),
-                // bracketModel = modelToGraph(tours);
 
-                lowerBracket(tours);
+                if (tournamentConsts[tournamentType.value] === 'Double Elimination') lowerBracket(tours);
 
                 actions.changeTitle(tournamentName.value);
                 actions.createTournament(tournamentName.value, tournamentType.value, teamsList, tours, modelToGraph(tours));

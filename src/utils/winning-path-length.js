@@ -13,12 +13,10 @@ export default function winningPathLength(game, visited = {}) {
                     Math,
                     _.map(
                         game.sides,
-                        // ({ seed }) => (seed != null && seed.sourceGame != null && seed.rank == 1) ?
                         ({sourceGame}) => (sourceGame !== null) ?
                             winningPathLength(sourceGame, visited) : 0
                     )
-                ) :
-                0
+                ) : 0
         )
     );
 };

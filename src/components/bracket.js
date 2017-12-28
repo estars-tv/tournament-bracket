@@ -1,6 +1,5 @@
 import React, {Component, PropTypes, PureComponent} from "react";
 import _ from "underscore";
-import GameShape from "./game-shape";
 import winningPathLength from "../utils/winning-path-length";
 import BracketGame from "./bracket-game";
 
@@ -18,13 +17,10 @@ const toBracketGames = ({GameComponent, game, x, y, gameDimensions, roundSeparat
     ].concat(
         _.chain(game.sides)
             .map((obj, side) => ({...obj, side}))
-            // filter to the teams that come from winning other games
-            // .filter(({seed}) => seed && seed.sourceGame !== null && seed.rank === 1)
             .filter(({sourceGame}) => sourceGame !== null)
             .map(
-                // ({seed: {sourceGame}, side}) => {
                 ({sourceGame, side}) => {
-                    // we put visitor teams on the bottom
+
                     const isTop = side === 'teamOwner' ? homeOnTop : !homeOnTop,
                         multiplier = isTop ? -1 : 1;
 
@@ -67,29 +63,7 @@ const toBracketGames = ({GameComponent, game, x, y, gameDimensions, roundSeparat
  * Displays the bracket that culminates in a particular finals game
  */
 export default class Bracket extends Component {
-    // static propTypes = {
-    //     game: GameShape.isRequired,
-    //     GameComponent: PropTypes.func,
-    //
-    //     homeOnTop: PropTypes.bool,
-    //
-    //     gameDimensions: PropTypes.shape(
-    //         {
-    //             height: PropTypes.number.isRequired,
-    //             width: PropTypes.number.isRequired
-    //         }
-    //     ).isRequired,
-    //
-    //     svgPadding: PropTypes.number.isRequired,
-    //
-    //     lineInfo: PropTypes.shape(
-    //         {
-    //             yOffset: PropTypes.number.isRequired,
-    //             separation: PropTypes.number.isRequired,
-    //             homeVisitorSpread: PropTypes.number.isRequired
-    //         }
-    //     ).isRequired
-    // };
+    //todo propTypes
 
     static defaultProps = {
         GameComponent: BracketGame,
@@ -135,10 +109,8 @@ export default class Bracket extends Component {
                                 roundSeparatorWidth,
                                 game,
                                 round: numRounds,
-                                // svgPadding away from the right
-                                x: svgDimensions.width - svgPadding - gameDimensions.width,
-                                // vertically centered first game
-                                y: (svgDimensions.height / 2) - gameDimensions.height / 2,
+                                x: svgDimensions.width - svgPadding - gameDimensions.width, //отступ справа
+                                y: (svgDimensions.height / 2) - gameDimensions.height / 2, //вертикальное выравнивание
 
                                 ...rest
                             }
