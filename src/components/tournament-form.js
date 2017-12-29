@@ -217,188 +217,244 @@ class CreateTournament extends Component {
             }
         }
 
-//         function lowerBracket(tours) {
-//             console.log('tours', tours);
-//
-//             const countTours = tours.upper.length,
-//                 lastTour = tours.upper[countTours - 1],
-//                 countLastTour = lastTour.length,
-//                 lower = [];
-//
-//             let matchIdIterator = lastTour[countLastTour - 1].id + 1,
-//                 temp = [];
-//
-//             for (let i = 0; i < countTours; i++) {
-//                 let x = 2;
-// debugger;
-//                 while (x > 0) {
-//                     const countTour = tours.upper[i].length;
-// debugger;
-//                     for (let n = 0; n < countTour; countTour > 2 ? n++ : n += 2) {
-//                         const guest = x === 2 ? tours.upper[i][n] : lower.find((el) => {el.id === matchIdIterator}),
-//                             owner = x === 2 ? tours.upper[i][n + 1] : tours.upper[i + 1][n],  //todo
-//                             guestSource = i === 0 ? null : x === 2 ? {'@ref': guest.id} : null,
-//                             ownerSource = i === 0 ? null : x === 2 ? {'@ref': owner.id} : {'@ref': owner.id},
-//                             guestName = i === 0 ? getMatchLoser(guest) : x === 2 ? getMatchWinner(guest) : getMatchLoser(tours.upper[i][n]),
-//                             ownerName = i === 0 ? getMatchLoser(owner) : x === 2 ? getMatchWinner(owner) : getMatchWinner(tours.upper[i][n + 1]),
-//                             match = createMatch(
-//                                 {
-//                                     id: matchIdIterator,
-//                                     guestName: guestName,
-//                                     ownerName: ownerName,
-//                                     guestSource: guestSource,
-//                                     ownerSource: ownerSource
-//                                 }
-//                             );
-//
-//                         lower.push(match);
-//                         temp.push(match);
-//
-//                         matchIdIterator++;
-//                     }
-//
-//                     temp = [];
-//                     x--;
-//                 }
-//             }
-//
-//             (function final() {
-//                 const countLower = lower.length,
-//                     guest = lastTour[countLastTour - 1],
-//                     owner = lower[countLower - 1],
-//                     guestName = getMatchWinner(guest),
-//                     ownerName = getMatchWinner(owner),
-//                     finalMatch = createMatch(
-//                     {
-//                         id: matchIdIterator,
-//                         guestName: guestName,
-//                         ownerName: ownerName,
-//                         guestSource: guest.id,
-//                         ownerSource: owner.id
-//                     }
-//                 );
-//
-//                 lower.push(finalMatch);
-//             }());
-//
-//             tours.lower = lower;
-//         }
-
-        /**
-         * @name lowerBracket - построение нижней сетки
-         * @param tours
-         */
         function lowerBracket(tours) {
-            const upper = tours.upper,
-                lower = tours.lower;
+            console.log('tours', tours);
 
-            let matchIdIncrement;
+            const countTours = tours.upper.length,
+                lastTour = tours.upper[countTours - 1],
+                countLastTour = lastTour.length,
+                lower = [];
 
-            for (let i = 0; i < upper.length; i++) {
-                const currentUpperTourCount = upper[i].length;
+            let matchIdIterator = lastTour[countLastTour - 1].id + 1,
+                temp = [];
+            let z = 1;
 
-                if (currentUpperTourCount > 1) {
-                    if (i === 0) {
-                        for (let n = 0; n < currentUpperTourCount; n += 2) {
-                            const firstLoser = upper[i][n],
-                                secondLoser = upper[i][n + 1],
-                                firstLoserName = getMatchLoser(firstLoser),
-                                secondLoserName = getMatchLoser(secondLoser),
-                                lastUpperTour = upper[upper.length - 1],
-                                lastUpperTourCount = lastUpperTour.length;
+            for (let i = 0; i < countTours; i++) { //количество туров верхней сетки
+                let x = 2;
+                debugger;
+                while (x > 0) { //повторяем каждый новый тур по 2 раза
+                    // for (let n = 0; n < tours.upper[i].length; tours.upper[i].length > 1 ? n += 2 : n++) {   //количество матчей текущего тура верхней сетки
 
-                            matchIdIncrement = matchIdIncrement ? matchIdIncrement : lastUpperTour[lastUpperTourCount - 1].id + 1;
+                    if (tours.upper[i].length > 2) {
+                        let w = 0;
 
-                            if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
+                        for (let n = 0; n < tours.upper[i].length; tours.upper[i].length > 2 ? n += 2 : n++) {   //количество матчей текущего тура верхней сетки
+                            const guest = i !== 0 && x === 2 ? lower.find(function (el) {
+                                    return el.id === matchIdIterator - tours.upper[i].length;
+                                }) : x === 2 ? tours.upper[i][n] : tours.upper[i + 1][w],
+                                owner = i !== 0 && x === 2 ? lower.find(function (el) {
+                                    return el.id === matchIdIterator - tours.upper[i].length + 1;
+                                }) : x === 2 ? tours.upper[i][n + 1] : lower.find(function (el) {
+                                    // return el.id === tours.upper[i].length - 1 + w;
+                                    return el.id === matchIdIterator - tours.upper[i].length / 2;
+                                }),
+                                guestName = i === 0 && x === 2 ? getMatchLoser(guest) : x === 2 ? getMatchWinner(guest) : getMatchLoser(guest),
+                                ownerName = i === 0 && x === 2 ? getMatchLoser(owner) : x === 2 ? getMatchWinner(owner) : getMatchWinner(owner),
+                                guestSource = i === 0 ? null : x === 2 ? {'@ref': guest.id} : null,
+                                ownerSource = i === 0 ? null : x === 2 ? {'@ref': owner.id} : {'@ref': owner.id},
+                                match = createMatch(
+                                    {
+                                        id: matchIdIterator,
+                                        guestName: guestName,
+                                        ownerName: ownerName,
+                                        guestSource: guestSource,
+                                        ownerSource: ownerSource
+                                    }
+                                );
 
-                            tours.lower[i + 1].push(createMatch({
-                                id: matchIdIncrement,
-                                ownerName: firstLoserName,
-                                guestName: secondLoserName
-                            }));
+                            // console.log('i ' +i);
+                            // console.log('w ' +w);
+                            // console.log('tours.upper[i + 1]', tours.upper[i + 1]);
+                            // console.log('tours.upper[i + 1][w]', tours.upper[i + 1][w]);
+                            // console.log(tours.upper[i].length + w);
+                            // console.log('guest ' + guest.id + ' owner ' + owner.id);
+                            // console.log('lower', lower);
+                            // console.log('matchIdIterator', matchIdIterator);
+                            // console.log('el.id === matchIdIterator - tours.upper[i].length / 2', (matchIdIterator - tours.upper[i].length / 2));
+                            console.log('curr id ', matchIdIterator);
+                            console.log('guestName', guestName);
+                            console.log('ownerName', ownerName);
+                            console.log('_______________________________________________');
 
-                            matchIdIncrement++;
-                        }
-                    } else {
-                        for (let n = 0; n < currentUpperTourCount; n++) {
-                            const upperLoser = upper[i][n],
-                                lowerWinner = lower[i][n],
-                                upperLoserName = getMatchLoser(upperLoser),
-                                lowerWinnerName = getMatchWinner(lowerWinner);
+                            lower.push(match);
 
-                            if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
-
-                            tours.lower[i + 1].push(createMatch({
-                                id: matchIdIncrement,
-                                ownerName: upperLoserName,
-                                guestName: lowerWinnerName,
-                                guestSource: {'@ref': lowerWinner.id}
-                            }));
-
-                            matchIdIncrement++;
+                            z++;
+                            w++;
+                            matchIdIterator++;
                         }
                     }
-                } else {
-                    const lastLowerTour = lower[lower.length - 1].length;
+
                     debugger;
+                    // for (let n = 0; n < countTour; countTour > 2 ? n += 2 : n++) {
+                    //     console.log('n ' + n + ' z ' + z);
+                    //     z++;
 
-                    if (lastLowerTour > 1) {
-                        const lastLowerTour = lower[lower.length - 1],
-                            firstWinner = lastLowerTour[0],
-                            secondWinner = lastLowerTour[1],
-                            firstWinnerName = getMatchWinner(firstWinner),
-                            secondWinnerName = getMatchWinner(secondWinner);
+                    // const guest = x === 2 ? tours.upper[i][n] : lower.find((el) => {el.id === matchIdIterator}),
+                    //     owner = x === 2 ? tours.upper[i][n + 1] : tours.upper[i + 1][n],  //todo
+                    //     guestSource = i === 0 ? null : x === 2 ? {'@ref': guest.id} : null,
+                    //     ownerSource = i === 0 ? null : x === 2 ? {'@ref': owner.id} : {'@ref': owner.id},
+                    //     guestName = i === 0 ? getMatchLoser(guest) : x === 2 ? getMatchWinner(guest) : getMatchLoser(tours.upper[i][n]),
+                    //     ownerName = i === 0 ? getMatchLoser(owner) : x === 2 ? getMatchWinner(owner) : getMatchWinner(tours.upper[i][n + 1]),
+                    //     match = createMatch(
+                    //         {
+                    //             id: matchIdIterator,
+                    //             guestName: guestName,
+                    //             ownerName: ownerName,
+                    //             guestSource: guestSource,
+                    //             ownerSource: ownerSource
+                    //         }
+                    //     );
+                    //
+                    // lower.push(match);
+                    // temp.push(match);
+                    //
+                    // matchIdIterator++;
+                    // }
 
-                        if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
-
-                        tours.lower[i + 1].push(createMatch({
-                            id: matchIdIncrement,
-                            ownerName: firstWinnerName,
-                            guestName: secondWinnerName,
-                            ownerSource: {'@ref': firstWinner.id},
-                            guestSource: {'@ref': secondWinner.id}
-                        }));
-
-                        matchIdIncrement++;
-                    }
-
-                    //финал лузеров
-                    const lastUpperTour = upper[upper.length - 1],
-                        upperLoser = lastUpperTour[0],
-                        upperWinner = lastUpperTour[0],
-                        lastTour = lower[lower.length - 1],
-                        lastTourCount = lastTour.length,
-                        lowerWinner = lastTour[lastTourCount - 1],
-                        upperLoserName = getMatchLoser(upperLoser),
-                        upperWinnerName = getMatchWinner(upperWinner),
-                        lowerWinnerName = getMatchWinner(lowerWinner);
-                    debugger;
-                    const losersFinal = createMatch({
-                        id: matchIdIncrement,
-                        ownerName: upperLoserName,
-                        guestName: lowerWinnerName,
-                        guestSource: {'@ref': lowerWinner.id}
-                    });
-
-                    if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
-
-                    tours.lower[i + 1].push(losersFinal);
-
-                    matchIdIncrement++;
-
-                    //финал
-                    if (!tours.lower[i + 2]) tours.lower[i + 2] = [];
-
-                    tours.lower[i + 2].push(createMatch({
-                        id: matchIdIncrement,
-                        ownerName: upperWinnerName,
-                        guestName: getMatchWinner(losersFinal),
-                        ownerSource: {'@ref': upperWinner.id},
-                        guestSource: {'@ref': losersFinal.id}
-                    }));
+                    temp = [];
+                    x--;
                 }
             }
+
+            console.log(lower);
+
+            // (function final() {
+            //     const countLower = lower.length,
+            //         guest = lastTour[countLastTour - 1],
+            //         owner = lower[countLower - 1],
+            //         guestName = getMatchWinner(guest),
+            //         ownerName = getMatchWinner(owner),
+            //         finalMatch = createMatch(
+            //         {
+            //             id: matchIdIterator,
+            //             guestName: guestName,
+            //             ownerName: ownerName,
+            //             guestSource: guest.id,
+            //             ownerSource: owner.id
+            //         }
+            //     );
+            //
+            //     lower.push(finalMatch);
+            // }());
+
+            tours.lower = lower;
         }
+
+        // /**
+        //  * @name lowerBracket - построение нижней сетки
+        //  * @param tours
+        //  */
+        // function lowerBracket(tours) {
+        //     const upper = tours.upper,
+        //         lower = tours.lower;
+        //
+        //     let matchIdIncrement;
+        //
+        //     for (let i = 0; i < upper.length; i++) {
+        //         const currentUpperTourCount = upper[i].length;
+        //
+        //         if (currentUpperTourCount > 1) {
+        //             if (i === 0) {
+        //                 for (let n = 0; n < currentUpperTourCount; n += 2) {
+        //                     const firstLoser = upper[i][n],
+        //                         secondLoser = upper[i][n + 1],
+        //                         firstLoserName = getMatchLoser(firstLoser),
+        //                         secondLoserName = getMatchLoser(secondLoser),
+        //                         lastUpperTour = upper[upper.length - 1],
+        //                         lastUpperTourCount = lastUpperTour.length;
+        //
+        //                     matchIdIncrement = matchIdIncrement ? matchIdIncrement : lastUpperTour[lastUpperTourCount - 1].id + 1;
+        //
+        //                     if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
+        //
+        //                     tours.lower[i + 1].push(createMatch({
+        //                         id: matchIdIncrement,
+        //                         ownerName: firstLoserName,
+        //                         guestName: secondLoserName
+        //                     }));
+        //
+        //                     matchIdIncrement++;
+        //                 }
+        //             } else {
+        //                 for (let n = 0; n < currentUpperTourCount; n++) {
+        //                     const upperLoser = upper[i][n],
+        //                         lowerWinner = lower[i][n],
+        //                         upperLoserName = getMatchLoser(upperLoser),
+        //                         lowerWinnerName = getMatchWinner(lowerWinner);
+        //
+        //                     if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
+        //
+        //                     tours.lower[i + 1].push(createMatch({
+        //                         id: matchIdIncrement,
+        //                         ownerName: upperLoserName,
+        //                         guestName: lowerWinnerName,
+        //                         guestSource: {'@ref': lowerWinner.id}
+        //                     }));
+        //
+        //                     matchIdIncrement++;
+        //                 }
+        //             }
+        //         } else {
+        //             const lastLowerTour = lower[lower.length - 1].length;
+        //             debugger;
+        //
+        //             if (lastLowerTour > 1) {
+        //                 const lastLowerTour = lower[lower.length - 1],
+        //                     firstWinner = lastLowerTour[0],
+        //                     secondWinner = lastLowerTour[1],
+        //                     firstWinnerName = getMatchWinner(firstWinner),
+        //                     secondWinnerName = getMatchWinner(secondWinner);
+        //
+        //                 if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
+        //
+        //                 tours.lower[i + 1].push(createMatch({
+        //                     id: matchIdIncrement,
+        //                     ownerName: firstWinnerName,
+        //                     guestName: secondWinnerName,
+        //                     ownerSource: {'@ref': firstWinner.id},
+        //                     guestSource: {'@ref': secondWinner.id}
+        //                 }));
+        //
+        //                 matchIdIncrement++;
+        //             }
+        //
+        //             //финал лузеров
+        //             const lastUpperTour = upper[upper.length - 1],
+        //                 upperLoser = lastUpperTour[0],
+        //                 upperWinner = lastUpperTour[0],
+        //                 lastTour = lower[lower.length - 1],
+        //                 lastTourCount = lastTour.length,
+        //                 lowerWinner = lastTour[lastTourCount - 1],
+        //                 upperLoserName = getMatchLoser(upperLoser),
+        //                 upperWinnerName = getMatchWinner(upperWinner),
+        //                 lowerWinnerName = getMatchWinner(lowerWinner);
+        //             debugger;
+        //             const losersFinal = createMatch({
+        //                 id: matchIdIncrement,
+        //                 ownerName: upperLoserName,
+        //                 guestName: lowerWinnerName,
+        //                 guestSource: {'@ref': lowerWinner.id}
+        //             });
+        //
+        //             if (!tours.lower[i + 1]) tours.lower[i + 1] = [];
+        //
+        //             tours.lower[i + 1].push(losersFinal);
+        //
+        //             matchIdIncrement++;
+        //
+        //             //финал
+        //             if (!tours.lower[i + 2]) tours.lower[i + 2] = [];
+        //
+        //             tours.lower[i + 2].push(createMatch({
+        //                 id: matchIdIncrement,
+        //                 ownerName: upperWinnerName,
+        //                 guestName: getMatchWinner(losersFinal),
+        //                 ownerSource: {'@ref': upperWinner.id},
+        //                 guestSource: {'@ref': losersFinal.id}
+        //             }));
+        //         }
+        //     }
+        // }
 
         /**
          * @name getMatchWinner - получение победителя в матче
