@@ -235,10 +235,10 @@ class CreateTournament extends Component {
                 while (x > 0) { //повторяем каждый новый тур по 2 раза
                     // for (let n = 0; n < tours.upper[i].length; tours.upper[i].length > 1 ? n += 2 : n++) {   //количество матчей текущего тура верхней сетки
 
-                    if (tours.upper[i].length > 2) {
+                    if (tours.upper[i].length > 1) {
                         let w = 0;
 
-                        for (let n = 0; n < tours.upper[i].length; tours.upper[i].length > 2 ? n += 2 : n++) {   //количество матчей текущего тура верхней сетки
+                        for (let n = 0; n < tours.upper[i].length; n += 2) {   //количество матчей текущего тура верхней сетки
                             const guest = i !== 0 && x === 2 ? lower.find(function (el) {
                                     return el.id === matchIdIterator - tours.upper[i].length;
                                 }) : x === 2 ? tours.upper[i][n] : tours.upper[i + 1][w],
@@ -282,13 +282,14 @@ class CreateTournament extends Component {
                             w++;
                             matchIdIterator++;
                         }
+                    } else {
+
                     }
 
                     debugger;
                     // for (let n = 0; n < countTour; countTour > 2 ? n += 2 : n++) {
                     //     console.log('n ' + n + ' z ' + z);
                     //     z++;
-
                     // const guest = x === 2 ? tours.upper[i][n] : lower.find((el) => {el.id === matchIdIterator}),
                     //     owner = x === 2 ? tours.upper[i][n + 1] : tours.upper[i + 1][n],  //todo
                     //     guestSource = i === 0 ? null : x === 2 ? {'@ref': guest.id} : null,
@@ -318,24 +319,24 @@ class CreateTournament extends Component {
 
             console.log(lower);
 
-            // (function final() {
-            //     const countLower = lower.length,
-            //         guest = lastTour[countLastTour - 1],
-            //         owner = lower[countLower - 1],
-            //         guestName = getMatchWinner(guest),
-            //         ownerName = getMatchWinner(owner),
-            //         finalMatch = createMatch(
-            //         {
-            //             id: matchIdIterator,
-            //             guestName: guestName,
-            //             ownerName: ownerName,
-            //             guestSource: guest.id,
-            //             ownerSource: owner.id
-            //         }
-            //     );
-            //
-            //     lower.push(finalMatch);
-            // }());
+            (function final() {
+                const countLower = lower.length,
+                    guest = lastTour[countLastTour - 1],
+                    owner = lower[countLower - 1],
+                    guestName = getMatchWinner(guest),
+                    ownerName = getMatchWinner(owner),
+                    finalMatch = createMatch(
+                    {
+                        id: matchIdIterator,
+                        guestName: guestName,
+                        ownerName: ownerName,
+                        guestSource: guest.id,
+                        ownerSource: owner.id
+                    }
+                );
+
+                lower.push(finalMatch);
+            }());
 
             tours.lower = lower;
         }
