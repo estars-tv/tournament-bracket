@@ -149,7 +149,7 @@ class CreateTournament extends Component {
                         firstMatchSource = firstMatch.id,
                         secondMatchSource = secondMath.id,
                         winnersId = tours[i].length > 0 ?
-                            tours[i][tours[i].length - 1].id + 1 : lastTour[lastTourMatches - 1].id + 1,
+                        tours[i][tours[i].length - 1].id + 1 : lastTour[lastTourMatches - 1].id + 1,
                         winners = {
                             id: winnersId,
                             sides: {
@@ -250,27 +250,27 @@ class CreateTournament extends Component {
                                 }),
                                 guestName = i === 0 && x === 2 ? getMatchLoser(guest) : x === 2 ? getMatchWinner(guest) : getMatchLoser(guest),
                                 ownerName = i === 0 && x === 2 ? getMatchLoser(owner) : x === 2 ? getMatchWinner(owner) : getMatchWinner(owner),
-                                guestSource = i === 0 ? null : x === 2 ? {'@ref': guest.id} : null,
-                                ownerSource = i === 0 ? null : x === 2 ? {'@ref': owner.id} : {'@ref': owner.id},
+                                guestSource = i === 0 && x === 2 ? null : x === 2 ? {'@ref': guest.id} : null,
+                                ownerSource = i === 0 && x === 2 ? null : x === 2 ? {'@ref': owner.id} : {'@ref': owner.id},
                                 match = createMatch(
                                     {
                                         id: matchIdIterator,
-                                        guestName: guestName,
-                                        ownerName: ownerName,
-                                        guestSource: guestSource,
-                                        ownerSource: ownerSource
+                                        guestName: ownerName,
+                                        ownerName: guestName,
+                                        guestSource: ownerSource,
+                                        ownerSource: guestSource
                                     }
                                 );
 
-                            // console.log('i ' +i);
-                            // console.log('w ' +w);
-                            // console.log('tours.upper[i + 1]', tours.upper[i + 1]);
-                            // console.log('tours.upper[i + 1][w]', tours.upper[i + 1][w]);
-                            // console.log(tours.upper[i].length + w);
-                            // console.log('guest ' + guest.id + ' owner ' + owner.id);
-                            // console.log('lower', lower);
-                            // console.log('matchIdIterator', matchIdIterator);
-                            // console.log('el.id === matchIdIterator - tours.upper[i].length / 2', (matchIdIterator - tours.upper[i].length / 2));
+                            console.log('i ' + i);
+                            console.log('w ' + w);
+                            console.log('tours.upper[i + 1]', tours.upper[i + 1]);
+                            console.log('tours.upper[i + 1][w]', tours.upper[i + 1][w]);
+                            console.log(tours.upper[i].length + w);
+                            console.log('guest ' + guest.id + ' owner ' + owner.id);
+                            console.log('lower', lower);
+                            console.log('matchIdIterator', matchIdIterator);
+                            console.log('el.id === matchIdIterator - tours.upper[i].length / 2', (matchIdIterator - tours.upper[i].length / 2));
                             console.log('curr id ', matchIdIterator);
                             console.log('guestName', guestName);
                             console.log('ownerName', ownerName);
@@ -326,19 +326,19 @@ class CreateTournament extends Component {
                     guestName = getMatchWinner(guest),
                     ownerName = getMatchWinner(owner),
                     finalMatch = createMatch(
-                    {
-                        id: matchIdIterator,
-                        guestName: guestName,
-                        ownerName: ownerName,
-                        guestSource: guest.id,
-                        ownerSource: owner.id
-                    }
-                );
+                        {
+                            id: matchIdIterator,
+                            guestName: guestName,
+                            ownerName: ownerName,
+                            guestSource: {'@ref': owner.id},
+                            ownerSource: {'@ref': guest.id}
+                        }
+                    );
 
                 lower.push(finalMatch);
             }());
 
-            tours.lower = lower;
+            tours.lower = [lower];
         }
 
         // /**
@@ -556,26 +556,26 @@ class CreateTournament extends Component {
         return redirect ?
             <Redirect to='/bracket'/>
             : (<form onSubmit={handleSubmit}>
-                    <input
-                        className='tournament-name'
-                        name="name"
-                        type="text"
-                        placeholder="Название турнира"
-                        ref={(input) => {
+                <input
+                    className='tournament-name'
+                    name="name"
+                    type="text"
+                    placeholder="Название турнира"
+                    ref={(input) => {
                             tournamentName = input
                         }}
-                    />
-                    <select className='tournament-type' name="type" ref={(input) => {
+                />
+                <select className='tournament-type' name="type" ref={(input) => {
                         tournamentType = input
                     }}>
-                        <option value={0}>Single Elimination</option>
-                        <option value={1}>Double Elimination</option>
-                    </select>
-                    <label htmlFor="team-list" className='error' ref={(input) => {
+                    <option value={0}>Single Elimination</option>
+                    <option value={1}>Double Elimination</option>
+                </select>
+                <label htmlFor="team-list" className='error' ref={(input) => {
                         errorLabel = input
                     }}>
-                        {error}
-                    </label>
+                    {error}
+                </label>
                     <textarea
                         id='team-list'
                         className='teams-list'
@@ -585,9 +585,9 @@ class CreateTournament extends Component {
                             teams = input
                         }}
                     />
-                    <button>Генерировать</button>
-                </form>
-            );
+                <button>Генерировать</button>
+            </form>
+        );
     }
 }
 
