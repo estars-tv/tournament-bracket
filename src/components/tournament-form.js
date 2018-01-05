@@ -223,7 +223,8 @@ class CreateTournament extends Component {
             const countTours = tours.upper.length,
                 lastTour = tours.upper[countTours - 1],
                 countLastTour = lastTour.length,
-                lower = [];
+                lower = [],
+                templower = [];
 
             let matchIdIterator = lastTour[countLastTour - 1].id + 1,
                 temp = [];
@@ -239,15 +240,24 @@ class CreateTournament extends Component {
                         let w = 0;
 
                         for (let n = 0; n < tours.upper[i].length; n += 2) {   //количество матчей текущего тура верхней сетки
-                            const owner = i !== 0 && x === 2 ? lower.find(function (el) {
-                                    return el.id === matchIdIterator - tours.upper[i].length;
-                                }) : x === 2 ? tours.upper[i][n] : tours.upper[i + 1][w],
-                                guest = i !== 0 && x === 2 ? lower.find(function (el) {
-                                    return el.id === matchIdIterator - tours.upper[i].length + 1;
-                                }) : x === 2 ? tours.upper[i][n + 1] : lower.find(function (el) {
-                                    // return el.id === tours.upper[i].length - 1 + w;
-                                    return el.id === matchIdIterator - tours.upper[i].length / 2;
-                                }),
+                            console.log('_n', n);
+                            console.log('_i', i);
+                            console.log('_x', x);
+                            console.info(temp);
+                            console.info(templower.length);
+                            console.info(templower);
+                            //не первый тур нижней сетки и первый раз
+                            //const owner = i !== 0 && x === 2 ? lower.find(function (el) {return el.id === matchIdIterator - tours.upper[i].length;}) :
+                            const owner = i !== 0 && x === 2 ? templower[templower.length - 1][n] :
+                                //первый раз              иначе     не первый раз
+                                x === 2 ? tours.upper[i][n] : tours.upper[i + 1][w],
+
+                            //не первый тур нижней сетки и не первый раз
+                            //    guest = i !== 0 && x === 2 ? lower.find(function (el) {return el.id === matchIdIterator - tours.upper[i].length + 1;}) :
+                                guest = i !== 0 && x === 2 ? templower[templower.length - 1][n + 1] :
+                                    //первый раз                  иначе             не первый раз
+                                    x === 2 ? tours.upper[i][n + 1] : lower.find(function (el) {return el.id === matchIdIterator - tours.upper[i].length / 2;}),
+
                                 ownerName = i === 0 && x === 2 ? getMatchLoser(owner) : x === 2 ? getMatchWinner(owner) : getMatchLoser(owner),
                                 guestName = i === 0 && x === 2 ? getMatchLoser(guest) : x === 2 ? getMatchWinner(guest) : getMatchWinner(guest),
                                 ownerSource = i === 0 && x === 2 ? null : x === 2 ? {'@ref': owner.id} : null,
@@ -265,6 +275,9 @@ class CreateTournament extends Component {
                             console.log('i ' + i);
                             console.log('x ' + x);
                             console.log('w ' + w);
+                            console.log('n ' + n);
+                            console.log('matchIdIterator ' + matchIdIterator);
+                            console.log(tours.upper[i]);
                             //console.log('tours.upper[i + 1]', tours.upper[i + 1]);
                             //console.log('tours.upper[i + 1][w]', tours.upper[i + 1][w]);
                             //console.log(tours.upper[i].length + w);
@@ -278,6 +291,7 @@ class CreateTournament extends Component {
                             console.log('_______________________________________________');
 
                             lower.push(match);
+                            temp.push(match);
 
                             z++;
                             w++;
@@ -312,7 +326,7 @@ class CreateTournament extends Component {
                     //
                     // matchIdIterator++;
                     // }
-
+                    templower.push(temp);
                     temp = [];
                     x--;
                 }
