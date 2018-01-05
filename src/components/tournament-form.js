@@ -206,12 +206,12 @@ class CreateTournament extends Component {
                     teamOwner: {
                         name: obj.ownerName || null,
                         score: obj.ownerScore || null,
-                        sourceGame: obj.ownerSource || null,
+                        sourceGame: obj.ownerSource || null
                     },
                     teamGuest: {
                         name: obj.guestName || null,
                         score: obj.guestScore || null,
-                        sourceGame: obj.guestSource || null,
+                        sourceGame: obj.guestSource || null
                     }
                 }
             }
@@ -239,41 +239,42 @@ class CreateTournament extends Component {
                         let w = 0;
 
                         for (let n = 0; n < tours.upper[i].length; n += 2) {   //количество матчей текущего тура верхней сетки
-                            const guest = i !== 0 && x === 2 ? lower.find(function (el) {
+                            const owner = i !== 0 && x === 2 ? lower.find(function (el) {
                                     return el.id === matchIdIterator - tours.upper[i].length;
                                 }) : x === 2 ? tours.upper[i][n] : tours.upper[i + 1][w],
-                                owner = i !== 0 && x === 2 ? lower.find(function (el) {
+                                guest = i !== 0 && x === 2 ? lower.find(function (el) {
                                     return el.id === matchIdIterator - tours.upper[i].length + 1;
                                 }) : x === 2 ? tours.upper[i][n + 1] : lower.find(function (el) {
                                     // return el.id === tours.upper[i].length - 1 + w;
                                     return el.id === matchIdIterator - tours.upper[i].length / 2;
                                 }),
-                                guestName = i === 0 && x === 2 ? getMatchLoser(guest) : x === 2 ? getMatchWinner(guest) : getMatchLoser(guest),
-                                ownerName = i === 0 && x === 2 ? getMatchLoser(owner) : x === 2 ? getMatchWinner(owner) : getMatchWinner(owner),
-                                guestSource = i === 0 && x === 2 ? null : x === 2 ? {'@ref': guest.id} : null,
-                                ownerSource = i === 0 && x === 2 ? null : x === 2 ? {'@ref': owner.id} : {'@ref': owner.id},
+                                ownerName = i === 0 && x === 2 ? getMatchLoser(owner) : x === 2 ? getMatchWinner(owner) : getMatchLoser(owner),
+                                guestName = i === 0 && x === 2 ? getMatchLoser(guest) : x === 2 ? getMatchWinner(guest) : getMatchWinner(guest),
+                                ownerSource = i === 0 && x === 2 ? null : x === 2 ? {'@ref': owner.id} : null,
+                                guestSource = i === 0 && x === 2 ? null : x === 2 ? {'@ref': guest.id} : {'@ref': guest.id},
                                 match = createMatch(
                                     {
                                         id: matchIdIterator,
-                                        guestName: ownerName,
-                                        ownerName: guestName,
-                                        guestSource: ownerSource,
-                                        ownerSource: guestSource
+                                        guestName: guestName,
+                                        ownerName: ownerName,
+                                        guestSource: guestSource,
+                                        ownerSource: ownerSource
                                     }
                                 );
 
                             console.log('i ' + i);
+                            console.log('x ' + x);
                             console.log('w ' + w);
-                            console.log('tours.upper[i + 1]', tours.upper[i + 1]);
-                            console.log('tours.upper[i + 1][w]', tours.upper[i + 1][w]);
-                            console.log(tours.upper[i].length + w);
-                            console.log('guest ' + guest.id + ' owner ' + owner.id);
-                            console.log('lower', lower);
-                            console.log('matchIdIterator', matchIdIterator);
-                            console.log('el.id === matchIdIterator - tours.upper[i].length / 2', (matchIdIterator - tours.upper[i].length / 2));
+                            //console.log('tours.upper[i + 1]', tours.upper[i + 1]);
+                            //console.log('tours.upper[i + 1][w]', tours.upper[i + 1][w]);
+                            //console.log(tours.upper[i].length + w);
+                            //console.log('guest ' + guest.id + ' owner ' + owner.id);
+                            //console.log('lower', lower);
+                            //console.log('matchIdIterator', matchIdIterator);
+                            //console.log('el.id === matchIdIterator - tours.upper[i].length / 2', (matchIdIterator - tours.upper[i].length / 2));
                             console.log('curr id ', matchIdIterator);
-                            console.log('guestName', guestName);
-                            console.log('ownerName', ownerName);
+                            console.log('guestName', ownerName);
+                            console.log('ownerName', guestName);
                             console.log('_______________________________________________');
 
                             lower.push(match);
@@ -321,17 +322,17 @@ class CreateTournament extends Component {
 
             (function final() {
                 const countLower = lower.length,
-                    guest = lastTour[countLastTour - 1],
-                    owner = lower[countLower - 1],
-                    guestName = getMatchWinner(guest),
+                    owner = lastTour[countLastTour - 1],
+                    guest = lower[countLower - 1],
                     ownerName = getMatchWinner(owner),
+                    guestName = getMatchWinner(guest),
                     finalMatch = createMatch(
                         {
                             id: matchIdIterator,
                             guestName: guestName,
                             ownerName: ownerName,
-                            guestSource: {'@ref': owner.id},
-                            ownerSource: {'@ref': guest.id}
+                            guestSource: {'@ref': guest.id},
+                            ownerSource: {'@ref': owner.id}
                         }
                     );
 
