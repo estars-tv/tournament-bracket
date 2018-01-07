@@ -72,7 +72,7 @@ export default class Bracket extends Component {
 
         gameDimensions: {
             height: 80,
-            width: 200
+            width: 220
         },
 
         svgPadding: 20, // отступ между сетками (svg)

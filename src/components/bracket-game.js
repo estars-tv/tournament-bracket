@@ -17,7 +17,8 @@ class BracketGame extends PureComponent {
             winningScoreBackground: '#ccc',
             teamNameStyle: {fill: '#fff', fontSize: 12, textShadow: '1px 1px 1px #222'},
             teamScoreStyle: {fill: '#23252d', fontSize: 12},
-            teamSeparatorStyle: {stroke: '#2c2c2c', strokeWidth: 1}
+            teamSeparatorStyle: {stroke: '#2c2c2c', strokeWidth: 1},
+            matchIdStyle: {fill: '#ccc', fontSize: 12}
         }
     };
 
@@ -31,7 +32,8 @@ class BracketGame extends PureComponent {
                 winningScoreBackground,
                 teamNameStyle,
                 teamScoreStyle,
-                teamSeparatorStyle
+                teamSeparatorStyle,
+                matchIdStyle
             },
 
             homeOnTop,
@@ -77,7 +79,7 @@ class BracketGame extends PureComponent {
         };
 
         return (
-            <svg width="200" height="82" viewBox="0 0 200 82" {...rest}>
+            <svg width="220" height="80" viewBox="0 0 200 82" {...rest}>
                 {/*фон матча*/}
                 <rect x="0" y="12" width="200" height="45" fill={backgroundColor} rx="3" ry="3"/>
 
@@ -109,6 +111,10 @@ class BracketGame extends PureComponent {
                 }
 
                 <line x1="0" y1="34.5" x2="200" y2="34.5" style={teamSeparatorStyle}/>
+
+                <text x="-10" y="40" textAnchor="middle" style={matchIdStyle}>
+                    { game.id }
+                </text>
             </svg>
         );
     }
