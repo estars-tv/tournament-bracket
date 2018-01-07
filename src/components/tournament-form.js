@@ -346,7 +346,7 @@ class CreateTournament extends Component {
                             if (Object.prototype.hasOwnProperty.call(tours[bracket][i], key)) {
                                 const obj = {
                                     '@id': tours[bracket][i][key].id,
-                                    'tour': i
+                                    'tour': i + 1
                                 };
 
                                 model.push(Object.assign(obj, tours[bracket][i][key]));
