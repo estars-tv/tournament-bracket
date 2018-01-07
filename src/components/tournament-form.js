@@ -98,7 +98,7 @@ class CreateTournament extends Component {
                     secondTeam = teams[1];
 
                 matches.push({
-                    id: i,
+                    id: i + 1,
                     sides: {
                         teamOwner: {
                             name: firstTeam,
