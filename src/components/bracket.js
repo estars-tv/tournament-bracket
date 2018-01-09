@@ -96,8 +96,8 @@ export default class Bracket extends Component {
         const numRounds = winningPathLength(game);
 
         const svgDimensions = {
-            //height: (gameDimensions.height * Math.pow(2, numRounds - 1)) + svgPadding * 2,
-            height: (gameDimensions.height * Math.pow(2, numRounds - 1)),
+            height: (gameDimensions.height * Math.pow(2, numRounds - 1)) + svgPadding * 2,
+            //height: (gameDimensions.height * Math.pow(2, numRounds - 1)),
             //width: (numRounds * (gameDimensions.width + roundSeparatorWidth)) + svgPadding * 2
             //width: numRounds * gameDimensions.width + svgPadding
             width: numRounds * gameDimensions.width
