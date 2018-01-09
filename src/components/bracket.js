@@ -104,7 +104,7 @@ export default class Bracket extends Component {
         };
 
         return (
-            <div className="tours">
+            <div className="tours" style={{width: svgDimensions.width}}>
                 <Tours count={countTours} svgHeight={svgDimensions.height}/>
                 <svg {...svgDimensions} style={{position: 'absolute', top: '55px', left: 0}}>
                     <g>
