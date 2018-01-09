@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {Redirect} from 'react-router-dom';
 
 import * as actions from '../actions/actions';
-import {removeEmptyElements} from '../utils';
+import {removeEmptyElements} from '../utils/index';
 import {bracket as bracketConsts, teams as teamsConsts, tournament as tournamentConsts} from '../constants/bracket';
 
 let redirect = false;

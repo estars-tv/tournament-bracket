@@ -12,6 +12,8 @@ class BracketGame extends PureComponent {
     static defaultProps = {
         homeOnTop: true,
         styles: {
+            gameWidth: 210,
+            gameViewBox: '0 0 190 82',
             backgroundColor: '#484848',
             scoreBackground: '#757575',
             winningScoreBackground: '#ccc',
@@ -27,6 +29,8 @@ class BracketGame extends PureComponent {
             game,
 
             styles: {
+                gameWidth,
+                gameViewBox,
                 backgroundColor,
                 scoreBackground,
                 winningScoreBackground,
@@ -59,7 +63,7 @@ class BracketGame extends PureComponent {
 
             return (
                 <g>
-                    <rect x={x} y={y} height={22.5} width={200} fillOpacity={0}>
+                    <rect x={x} y={y} height={22.5} width={gameWidth} fillOpacity={0}>
                         {tooltip}
                     </rect>
 
@@ -79,17 +83,15 @@ class BracketGame extends PureComponent {
         };
 
         return (
-            <svg width="220" height="80" viewBox="0 0 200 82" {...rest}>
+            <svg width={gameWidth} height="80" viewBox={gameViewBox} {...rest}>
                 {/*фон матча*/}
-                <rect x="0" y="12" width="200" height="45" fill={backgroundColor} rx="3" ry="3"/>
+                <rect x="0" y="12" width={gameWidth} height="45" fill={backgroundColor} rx="3" ry="3"/>
 
                 {/*фон верхней команды*/}
-                <rect x="0" y="12" width="200" height="22.5" fill={backgroundColor}
-                      rx="3"
-                      ry="3"/>
+                <rect x="0" y="12" width={gameWidth} height="22.5" fill={backgroundColor} rx="3" ry="3"/>
 
                 {/*фон нижней команды*/}
-                <rect x="0" y="34.5" width="200" height="22.5"
+                <rect x="0" y="34.5" width={gameWidth} height="22.5"
                       fill={backgroundColor}
                       rx="3" ry="3"/>
 
@@ -110,9 +112,9 @@ class BracketGame extends PureComponent {
                     ) : null
                 }
 
-                <line x1="0" y1="34.5" x2="200" y2="34.5" style={teamSeparatorStyle}/>
+                <line x1="0" y1="34.5" x2={gameWidth} y2="34.5" style={teamSeparatorStyle}/>
 
-                <text x="-10" y="40" textAnchor="middle" style={matchIdStyle}>
+                <text x="-20" y="40" textAnchor="middle" style={matchIdStyle}>
                     { game.id }
                 </text>
             </svg>
