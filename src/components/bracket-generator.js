@@ -1,4 +1,4 @@
-import React, {Component, PropTypes, PureComponent} from "react";
+import React, {Component, PureComponent} from "react";
 import _ from "underscore";
 import Bracket from "./bracket";
 import winningPathLength from "../utils/winning-path-length";
@@ -28,16 +28,13 @@ const makeFinals = ({games}) => {
     );
 
     return _.chain(gamesFeedInto)
-        // получаем игры без исходной игры
         .filter(({feedsInto}) => feedsInto.length === 0)
         .map(
-            // получаем высоту группы по игре без исходника
             game => ({
                 game,
                 height: winningPathLength(game)
             })
         )
-        // строим от самой высокой (начальная игра без исходника)
         .sortBy(({height}) => height * -1)
         .value();
 };
@@ -46,8 +43,6 @@ const makeFinals = ({games}) => {
  * Генерация игр осторитированных по турам
  */
 export default class BracketGenerator extends Component {
-    //todo propTypes
-
     state = {
         finals: makeFinals({games: this.props.games})
     };
@@ -64,7 +59,6 @@ export default class BracketGenerator extends Component {
 
         const countTours = tours.lower && tours.lower.length > 0 ? tours.lower.length - 1 : tours.upper.length;
 
-        //вместо countTours={countTours} был countTours={height}
         return (
             <div
                 style={{display: 'flex', padding: '0 80px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', ...style}}>

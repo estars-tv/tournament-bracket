@@ -1,4 +1,4 @@
-import React, {PropTypes, PureComponent} from "react";
+import React, {PureComponent} from "react";
 import controllable from "react-controllables";
 import _ from "underscore";
 
@@ -6,8 +6,6 @@ import {RectClipped} from "./clipped";
 import {teamOwner, teamGuest} from "./game-shape";
 
 class BracketGame extends PureComponent {
-    //todo propTypes
-
     static defaultProps = {
         homeOnTop: true,
         styles: {
@@ -27,7 +25,6 @@ class BracketGame extends PureComponent {
     render() {
         const {
             game,
-            games,
             x,
             tournamentType,
             styles: {
@@ -48,22 +45,17 @@ class BracketGame extends PureComponent {
             ...rest
             } = this.props;
 
-        //const countGames = games.length;
-
-        const isPaired = number => !(number % 2);
+        //TODO закончить для de
+        //const isPaired = number => !(number % 2);
 
         //положение матча
-        let xValue = tournamentType === 0 ? x : game.isLower ? x + tourWidth :
-            game.tour > 2 && !isPaired(game.tour) ? x : x - tourWidth;
+        //let xValue = tournamentType === 0 ? x : game.isLower ? x + tourWidth :
+        //    game.tour > 2 && !isPaired(game.tour) ? x : x - tourWidth;
 
-        //костыль для 4х команд
-        //if (countGames === 6) {
-        //    xValue = tournamentType === 1 && game.isLower ? x + tourWidth : x;
-        //}
+        let xValue = x;
 
         const {sides} = game;
 
-        //TODO drop homeOnTop
         const top = sides[homeOnTop ? teamOwner : teamGuest],
             bottom = sides[homeOnTop ? teamGuest : teamOwner];
 
@@ -101,18 +93,14 @@ class BracketGame extends PureComponent {
 
         return (
             <svg width={gameWidth} height="80" viewBox={gameViewBox} x={xValue} {...rest}>
-                {/*фон матча*/}
                 <rect x="0" y="12" width={gameWidth} height="45" fill={backgroundColor} rx="3" ry="3"/>
 
-                {/*фон верхней команды*/}
                 <rect x="0" y="12" width={gameWidth} height="22.5" fill={backgroundColor} rx="3" ry="3"/>
 
-                {/*фон нижней команды*/}
                 <rect x="0" y="34.5" width={gameWidth} height="22.5"
                       fill={backgroundColor}
                       rx="3" ry="3"/>
 
-                {/*фон счета*/}
                 <rect x="0" y="12" width="30" height="45" fill={scoreBackground} rx="3" ry="3"/>
 
                 {winnerBackground}
@@ -139,4 +127,4 @@ class BracketGame extends PureComponent {
     }
 }
 
-export default controllable(BracketGame, ['hoveredTeamId']);
+export default BracketGame;

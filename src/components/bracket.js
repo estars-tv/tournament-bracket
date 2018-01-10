@@ -1,4 +1,4 @@
-import React, {Component, PropTypes, PureComponent} from "react";
+import React, {Component, PureComponent} from "react";
 import _ from "underscore";
 import winningPathLength from "../utils/winning-path-length";
 import BracketGame from "./bracket-game";
@@ -7,9 +7,11 @@ import Tours from "./tours";
 const toBracketGames = ({GameComponent, game, tournamentType, countTours, x, y, gameDimensions, roundSeparatorWidth, round,
     lineInfo, homeOnTop, ...rest}) => {
     const {width: gameWidth, height: gameHeight} = gameDimensions;
-    const defY = gameHeight * Math.pow(2, round - 2);
 
-    const ySep = tournamentType === 1 ? defY / 2 : defY;
+    //const defY = gameHeight * Math.pow(2, round - 2);
+    //const ySep = tournamentType === 1 ? defY / 2 : defY;
+
+    const ySep = gameHeight * Math.pow(2, round - 2);
 
     const isPaired = number => !(number % 2);
 
@@ -31,32 +33,29 @@ const toBracketGames = ({GameComponent, game, tournamentType, countTours, x, y, 
 
                     let defM = x - lineInfo.separation,
                         defH1 = x - (roundSeparatorWidth / 2),
-                        defH2 = x - roundSeparatorWidth,
-                        tourWidth = gameDimensions.width,
-                        M = tournamentType === 0 ? defM : game.isLower ? defM + tourWidth :
-                            game.tour > 2 && !isPaired(game.tour) ? defM : defM - tourWidth,
-                        H1 = tournamentType === 0 ? defH1 : game.isLower ? defH1 + tourWidth : defH1 - tourWidth,
-                        H2 = tournamentType === 0 ? defH2 : game.isLower ? defH2 + tourWidth : defH2 - tourWidth;
-
-                    if (game.isFinal && tournamentType === 1) H2 = multiplier === -1 ? defH2 : defH1 + tourWidth - 10;
-
-                    debugger;
-                    //if (game.isLowerFinal && tournamentType === 1) H2 = defH2 + tourWidth;
-
-                    //костыль для 4х команд
-                    //if (countTours === 3) {
-                    //    debugger;
-                    //    M = defM;
-                    //    H1 = defH1;
-                    //    H2 = defH2;
-                    //}
+                        defH2 = x - roundSeparatorWidth;
+                    //    tourWidth = gameDimensions.width,
+                    //    M = tournamentType === 0 ? defM : game.isLower ? defM + tourWidth :
+                    //        game.tour > 2 && !isPaired(game.tour) ? defM : defM - tourWidth,
+                    //    H1 = tournamentType === 0 ? defH1 : game.isLower ? defH1 + tourWidth : defH1 - tourWidth,
+                    //    H2 = tournamentType === 0 ? defH2 : game.isLower ? defH2 + tourWidth : defH2 - tourWidth;
+                    //
+                    //if (game.isFinal && tournamentType === 1) H2 = multiplier === -1 ? defH2 : defH1 + tourWidth - 10;
+                    //
+                    //const pathInfo = [
+                    //    `M${M}
+                    //    ${y + gameHeight / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,
+                    //    `H${H1}`,
+                    //    `V${y + gameHeight / 2 + lineInfo.yOffset + ((ySep / 2) * multiplier)}`,
+                    //    `H${H2}`
+                    //];
 
                     const pathInfo = [
-                        `M${M}
+                        `M${defM}
                         ${y + gameHeight / 2 + lineInfo.yOffset + multiplier * lineInfo.homeVisitorSpread}`,
-                        `H${H1}`,
+                        `H${defH1}`,
                         `V${y + gameHeight / 2 + lineInfo.yOffset + ((ySep / 2) * multiplier)}`,
-                        `H${H2}`
+                        `H${defH2}`
                     ];
 
                     //линия между матчами
@@ -74,15 +73,7 @@ const toBracketGames = ({GameComponent, game, tournamentType, countTours, x, y, 
                                     roundSeparatorWidth,
                                     tournamentType,
                                     countTours,
-                                    //x: x - gameWidth - roundSeparatorWidth,
                                     x: x - gameWidth,
-                                    //x: tournamentType === 0 ? x - gameWidth : game.isLower ? x - gameWidth : x - gameWidth,
-                                    //x: (function(){
-                                    //    console.log('gameWidth', gameWidth);
-                                    //    console.log('x', x);
-                                    //    console.log('game.isLower', game.isLower);
-                                    //    return tournamentType === 0 ? x - gameWidth : game.isLower ? x - gameWidth : x - gameWidth
-                                    //}()),
                                     y: y + ((ySep / 2) * multiplier),
                                     round: round - 1,
                                     ...rest
@@ -97,28 +88,16 @@ const toBracketGames = ({GameComponent, game, tournamentType, countTours, x, y, 
 
 };
 
-/**
- * Displays the bracket that culminates in a particular finals game
- */
 export default class Bracket extends Component {
-    //todo propTypes
-
     static defaultProps = {
         GameComponent: BracketGame,
-
         homeOnTop: true,
-
         gameDimensions: {
             height: 80,
             width: 256
         },
-
         svgPadding: 20, // отступ между сетками (svg)
         roundSeparatorWidth: 15, // отступ до изгиба линии
-
-        /**
-         * lineInfo.separation - отступ между линиями и командами
-         */
         lineInfo: {
             yOffset: -6,
             separation: 0,
@@ -133,15 +112,16 @@ export default class Bracket extends Component {
 
         const svgDimensions = {
             height: (gameDimensions.height * Math.pow(2, numRounds - 1)) + svgPadding * 2,
-            //height: (gameDimensions.height * Math.pow(2, numRounds - 1)),
-            //width: (numRounds * (gameDimensions.width + roundSeparatorWidth)) + svgPadding * 2
-            //width: numRounds * gameDimensions.width + svgPadding
             width: numRounds * gameDimensions.width
         };
 
+        //TODO закончить для de
         //ширина туров
-        const toursWidth = tournamentType === 1 ? countTours * 510 - 256 - 80 : svgDimensions.width,
-            svgWidth = tournamentType === 1 ? toursWidth : svgDimensions.width;
+        //const toursWidth = tournamentType === 1 ? countTours * 510 - 256 - 80 : svgDimensions.width,
+        //    svgWidth = tournamentType === 1 ? toursWidth : svgDimensions.width;
+
+        const toursWidth = svgDimensions.width,
+            svgWidth = svgDimensions.width;
 
         return (
             <div className="tours" style={{width: toursWidth}}>
@@ -158,9 +138,11 @@ export default class Bracket extends Component {
                                     tournamentType,
                                     countTours,
                                     round: numRounds,
-                                    //x: svgDimensions.width - svgPadding - gameDimensions.width, //отступ справа
-                                    x: svgDimensions.width - gameDimensions.width, //отступ справа
-                                    y: (svgDimensions.height / 2) - gameDimensions.height / 2, //вертикальное выравнивание
+                                    x: svgDimensions.width - gameDimensions.width,
+                                    //y: tournamentType === 1 ?
+                                    //((svgDimensions.height / 2) - gameDimensions.height / 2) / 2 :
+                                    //svgDimensions.height / 2) - gameDimensions.height / 2, //вертикальное выравнивание
+                                    y: (svgDimensions.height / 2) - gameDimensions.height / 2,
                                     ...rest
                                 }
                             )

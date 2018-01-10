@@ -14,8 +14,6 @@ class CreateTournament extends Component {
         const actions = this.props.actions,
             error = this.props.page.errorLabel;
 
-        console.log('props', this.props);
-
         let tournamentName = '',
             tournamentType = null,
             teams = '',
@@ -87,8 +85,6 @@ class CreateTournament extends Component {
          * @return {Array}
          */
         function generateMatches(teamsList) {
-            console.log('teamsList', teamsList);
-
             const matches = [],
                 teams = teamsList.slice(),
                 tba = teamsConsts.EMPTY_TEAM_NAME;
@@ -187,8 +183,6 @@ class CreateTournament extends Component {
                 toursDecrement /= 2;
                 i++;
             }
-
-            console.log('tours', tours);
 
             return tours;
         }
@@ -306,8 +300,6 @@ class CreateTournament extends Component {
                 teamGuest = sides.teamGuest,
                 teamOwner = sides.teamOwner;
 
-            console.log('winners match', match);
-
             if (teamGuest && teamOwner) {
                 return teamGuest.name === tba ? sides[notEmpty['teamGuest']].name : teamOwner.name === tba ?
                     sides[notEmpty['teamOwner']].name : teamsConsts.MATCH_WINNER.toValue(match.id);
@@ -320,7 +312,6 @@ class CreateTournament extends Component {
          * @returns {*}
          */
         function getMatchLoser(match) {
-            console.log('getMatchLoser', match);
             const tba = teamsConsts.EMPTY_TEAM_NAME,
                 sides = match.sides,
                 teamGuest = sides.teamGuest,
@@ -370,7 +361,6 @@ class CreateTournament extends Component {
         function handleSubmit(e) {
             e.preventDefault();
 
-            //todo проверку на заполненость полей
             if (checkTeams(teams.value)) {
                 const teamsList = drawTeams(),
                     matches = generateMatches(teamsList),
