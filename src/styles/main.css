@@ -52,7 +52,7 @@ button {
 }
 
 .tour {
-    display: table-cell;
+    display: inline-block;
 
     color: #757575;
     font-size: 16px;

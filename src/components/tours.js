@@ -4,16 +4,19 @@ import {tours as toursConst} from '../constants/bracket';
 
 export default class Tours extends Component {
     render() {
-        const {count, svgHeight} = this.props,
+        const {count, tournamentType, svgHeight} = this.props,
             columns = [];
+
+        debugger;
 
         for (var i = 0; i < count; i++) {
             const tourNumber = i + 1,
                 isPaired = number => !(number % 2),
                 currentStyle = isPaired(tourNumber) ? 'light' : 'dark',
-                tourClasses = classNames('tour', currentStyle);
+                tourClasses = classNames('tour', currentStyle),
+                tourWidth =  tournamentType === 1 && i > 0 && i < count - 1 ? '480px' : '225px';
 
-            columns.push(<div className={tourClasses} style={{width: '225px', height: svgHeight}} key={i}>
+            columns.push(<div className={tourClasses} style={{width: tourWidth, height: svgHeight}} key={i}>
                 {toursConst.DEFAULT_TOUR_NAME.toValue(tourNumber)}
             </div>);
         }

@@ -1,7 +1,6 @@
 import React, {PropTypes, PureComponent} from "react";
 import controllable from "react-controllables";
 import _ from "underscore";
-// import moment from "moment";
 
 import {RectClipped} from "./clipped";
 import {teamOwner, teamGuest} from "./game-shape";
@@ -12,6 +11,7 @@ class BracketGame extends PureComponent {
     static defaultProps = {
         homeOnTop: true,
         styles: {
+            tourWidth: 256,
             gameWidth: 210,
             gameViewBox: '0 0 190 82',
             backgroundColor: '#484848',
@@ -27,8 +27,11 @@ class BracketGame extends PureComponent {
     render() {
         const {
             game,
-
+            games,
+            x,
+            tournamentType,
             styles: {
+                tourWidth,
                 gameWidth,
                 gameViewBox,
                 backgroundColor,
@@ -38,15 +41,29 @@ class BracketGame extends PureComponent {
                 teamScoreStyle,
                 teamSeparatorStyle,
                 matchIdStyle
-            },
+                },
 
             homeOnTop,
 
             ...rest
-        } = this.props;
+            } = this.props;
+
+        //const countGames = games.length;
+
+        const isPaired = number => !(number % 2);
+
+        //положение матча
+        let xValue = tournamentType === 0 ? x : game.isLower ? x + tourWidth :
+            game.tour > 2 && !isPaired(game.tour) ? x : x - tourWidth;
+
+        //костыль для 4х команд
+        //if (countGames === 6) {
+        //    xValue = tournamentType === 1 && game.isLower ? x + tourWidth : x;
+        //}
 
         const {sides} = game;
 
+        //TODO drop homeOnTop
         const top = sides[homeOnTop ? teamOwner : teamGuest],
             bottom = sides[homeOnTop ? teamGuest : teamOwner];
 
@@ -83,7 +100,7 @@ class BracketGame extends PureComponent {
         };
 
         return (
-            <svg width={gameWidth} height="80" viewBox={gameViewBox} {...rest}>
+            <svg width={gameWidth} height="80" viewBox={gameViewBox} x={xValue} {...rest}>
                 {/*фон матча*/}
                 <rect x="0" y="12" width={gameWidth} height="45" fill={backgroundColor} rx="3" ry="3"/>
 

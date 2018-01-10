@@ -264,7 +264,8 @@ class CreateTournament extends Component {
                         }
                     }
 
-                    tours.lower.push(temp);
+                    if (temp.length > 0) tours.lower.push(temp);
+
                     temp = [];
                     x++;
                 }
@@ -348,6 +349,13 @@ class CreateTournament extends Component {
                                     '@id': tours[bracket][i][key].id,
                                     'tour': i + 1
                                 };
+
+                                if (bracket === 'lower') {
+                                    obj.isLower = true;
+
+                                    if (i === tours[bracket].length - 1) obj.isFinal = true;
+                                    if (i === tours[bracket].length - 2) obj.isLowerFinal = true;
+                                }
 
                                 model.push(Object.assign(obj, tours[bracket][i][key]));
                             }

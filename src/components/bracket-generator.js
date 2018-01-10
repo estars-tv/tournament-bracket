@@ -59,9 +59,12 @@ export default class BracketGenerator extends Component {
     }
 
     render() {
-        const {style, ...rest} = this.props,
+        const {style, tournamentType, tours, ...rest} = this.props,
             {finals} = this.state;
 
+        const countTours = tours.lower && tours.lower.length > 0 ? tours.lower.length - 1 : tours.upper.length;
+
+        //вместо countTours={countTours} был countTours={height}
         return (
             <div
                 style={{display: 'flex', padding: '0 80px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', ...style}}>
@@ -71,7 +74,8 @@ export default class BracketGenerator extends Component {
                         ({game, height}) => (
                             <div key={game.id} style={{flexGrow: 1, maxWidth: '100%'}}>
                                 <div style={{maxWidth: '100%', overflow: 'auto', WebkitOverflowScrolling: 'touch'}}>
-                                    <Bracket game={game} countTours={height} {...rest}/>
+                                    <Bracket game={game} tournamentType={tournamentType}
+                                             countTours={countTours} {...rest}/>
                                 </div>
                             </div>
                         )
